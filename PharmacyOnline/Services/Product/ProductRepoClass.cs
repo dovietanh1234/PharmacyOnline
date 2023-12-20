@@ -565,23 +565,153 @@ namespace PharmacyOnline.Services.Product
             }
         }
 
-
-
-        /*
+        public async Task<List<getAll>> searchP(string search, int page, int pagesize = 10)
+        {
             try
             {
+                var products = _context.Products.AsQueryable().Where( p => (p.ProductName.Contains(search) || p.Title.Contains(search)) ).Include(p => p.Cate);
 
-            }catch(Exception ex) { throw new Exception($"{ex}"); }
-         */
+                var result = PaginationList<Entities.Product>.Create(products, page, pagesize > 3 ? pagesize : PAGE_SIZE);
+
+                List<getAll> new_list = new List<getAll>();
+
+                foreach (var product in result)
+                {
+                    if (product.IsAtive == true)
+                    {
+                        new_list.Add(new getAll()
+                        {
+                            Id = product.Id,
+                            productName = product.ProductName,
+                            title = product.Title,
+                            thumbnail = product.Thumbnail,
+                            cateGet = new CategoryGet
+                            {
+                                CateName = product.Cate.CateName
+                            }
+                        });
+                    }
+                }
+
+                return new_list;
 
 
+            }
+            catch (Exception ex) { 
+                throw new Exception($"{ex}"); 
+            }
+        }
+
+        public async Task<List<getAll>> filterCate(int? cate, int page, int pagesize = 10)
+        {
+            try
+            {
+                var products = _context.Products.AsQueryable().Where(p => p.CateId == cate).Include(p => p.Cate);
+
+                
+                var result = PaginationList<Entities.Product>.Create(products, page, pagesize > 3 ? pagesize : PAGE_SIZE);
+
+                List<getAll> new_list = new List<getAll>();
+
+                foreach (var product in result)
+                {
+                    if (product.IsAtive == true)
+                    {
+                        new_list.Add(new getAll()
+                        {
+                            Id = product.Id,
+                            productName = product.ProductName,
+                            title = product.Title,
+                            thumbnail = product.Thumbnail,
+                            cateGet = new CategoryGet
+                            {
+                                CateName = product.Cate.CateName
+                            }
+                        });
+                    }
+                }
+
+                return new_list;
+            }
+            catch (Exception ex) {
+                throw new Exception($"{ex}"); 
+            }
+        }
+
+        public async Task<List<getAll>> sort(string? sorting, int page, int pagesize = 10)
+        {
+            try
+            {
+                var products = _context.Products.AsQueryable();
+
+                
+
+                if (!string.IsNullOrEmpty(sorting))
+                {
+                    switch (sorting)
+                    {
+                        case "NAME_ASC": products = products.OrderBy(p => p.ProductName); break;
+                        case "NAME_DESC": products = products.OrderByDescending(p => p.ProductName); break;
+                        default: throw new Exception("please enter name sorting");
+                    }
+                }
+
+                products = products.Include(p => p.Cate);
+
+                var result = PaginationList<Entities.Product>.Create(products, page, pagesize > 3 ? pagesize : PAGE_SIZE);
+
+                List<getAll> new_list = new List<getAll>();
+
+                foreach (var product in result)
+                {
+                    if (product.IsAtive == true)
+                    {
+                        new_list.Add(new getAll()
+                        {
+                            Id = product.Id,
+                            productName = product.ProductName,
+                            title = product.Title,
+                            thumbnail = product.Thumbnail,
+                            cateGet = new CategoryGet
+                            {
+                                CateName = product.Cate.CateName
+                            }
+                        });
+                    }
+                }
+
+                return new_list;
 
 
+            }
+            catch (Exception ex) { throw new Exception($"{ex}"); }
+        }
 
 
+        public async Task<List<CategoryGet2>> getAllCategories()
+        {
+            try
+            {
+                var cates = await _context.Categories.ToListAsync();
 
+                List<CategoryGet2> listC = new List<CategoryGet2>();
 
+                foreach (var cate in cates)
+                {
+                    listC.Add(new CategoryGet2()
+                    {
+                        Id = cate.Id,
+                        CateName = cate.CateName
+                    });
+                }
+                return listC;
 
+            }
+            catch(Exception ex)
+            {
+                throw new Exception($"{ex.Message}");
+            }
+        }
 
     }
 }

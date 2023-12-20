@@ -25,6 +25,13 @@ namespace PharmacyOnline.Services.Product
 
         Task<result> DeleteProduct(int ProductId);
 
+        Task<List<getAll>> searchP(string search, int page, int pagesize = 10);
+
+        Task<List<getAll>> filterCate(int? cate, int page, int pagesize = 10);
+
+        Task<List<getAll>> sort(string? sorting, int page, int pagesize = 10);
+
+        Task<List<CategoryGet2>> getAllCategories();
 
     }
 }

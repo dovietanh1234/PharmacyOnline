@@ -53,6 +53,11 @@
             public string CateName { get; set; } = string.Empty;
     }
 
+    public class CategoryGet2
+    {
+        public int Id { get; set; } = 1;
+        public string CateName { get; set; } = string.Empty;
+    }
 
     public class ProductCapsuleDTO
     {

@@ -196,8 +196,33 @@ namespace PharmacyOnline.Controllers.Products
             return Ok( await _productRepo.DeleteProduct(productId) );
         }
 
+        [HttpGet]
+        [Route("search/product")]
+        public async Task<IActionResult> searchP(string search, int page = 1)
+        {
+            return Ok(await _productRepo.searchP( search, page));
+        }
 
+        [HttpGet]
+        [Route("filter/cate/product")]
+        public async Task<IActionResult> filter(int? cate, int page = 1)
+        {
+            return Ok(await _productRepo.filterCate(cate, page));
+        }
 
+        [HttpGet]
+        [Route("sort/product")]
+        public async Task<IActionResult> sort(string? sorting, int page = 1)
+        {
+            return Ok( await _productRepo.sort(sorting, page));
+        }
+
+        [HttpGet]
+        [Route("getall/categories")]
+        public async Task<IActionResult> category()
+        {
+            return Ok(await _productRepo.getAllCategories());
+        }
 
     }
 
