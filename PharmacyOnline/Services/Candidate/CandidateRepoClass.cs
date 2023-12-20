@@ -220,7 +220,7 @@ namespace PharmacyOnline.Services.Candidate
                     {
                         IdCandidate = can.Id,
                         RefreshToken = refToken,
-                        createAt = DateTime.Now.AddDays(1),
+                        CreateAt = DateTime.Now.AddDays(1),
                     };
 
                     await _context.KeyTokens.AddAsync(keyToken);
@@ -228,7 +228,7 @@ namespace PharmacyOnline.Services.Candidate
                 else
                 {
                     oldKeyToken.RefreshToken = refToken;
-                    oldKeyToken.createAt = DateTime.Now.AddDays(1);
+                    oldKeyToken.CreateAt = DateTime.Now.AddDays(1);
                     
                 }
                 
@@ -400,7 +400,7 @@ namespace PharmacyOnline.Services.Candidate
                 // handle if has valid refreshToken:
                 if ( model.refreshToken == oldKeyToken.RefreshToken )
                 {
-                    if (oldKeyToken.createAt > DateTime.Now)
+                    if (oldKeyToken.CreateAt > DateTime.Now)
                     {
                         // save this token into refreshToken has used:
                         var tkUsed = new RefreshTokenUsed()
@@ -426,7 +426,7 @@ namespace PharmacyOnline.Services.Candidate
                         string refToken = await handleTokens.createRefreshToken(payload);
 
                         oldKeyToken.RefreshToken = refToken;
-                        oldKeyToken.createAt = DateTime.Now.AddDays(1);
+                        oldKeyToken.CreateAt = DateTime.Now.AddDays(1);
 
                         await _context.SaveChangesAsync();
 
@@ -436,7 +436,7 @@ namespace PharmacyOnline.Services.Candidate
                             accessToken = await handleTokens.createToken(payload),
                             refreshToken = refToken,
                             status = 202,
-                            statusMessage = "login successfully"
+                            statusMessage = "verify refreshToken success"
                         };
                     }
                     else
@@ -585,7 +585,7 @@ namespace PharmacyOnline.Services.Candidate
                         {
                             IdCandidate = candidate.Id,
                             RefreshToken = refToken,
-                            createAt = DateTime.Now.AddDays(1),
+                            CreateAt = DateTime.Now.AddDays(1),
                         };
 
                         await _context.KeyTokens.AddAsync(keyToken);
@@ -593,7 +593,7 @@ namespace PharmacyOnline.Services.Candidate
                     else
                     {
                         oldKeyToken.RefreshToken = refToken;
-                        oldKeyToken.createAt = DateTime.Now.AddDays(1);
+                        oldKeyToken.CreateAt = DateTime.Now.AddDays(1);
 
                     }
 
@@ -633,7 +633,7 @@ namespace PharmacyOnline.Services.Candidate
                         {
                             IdCandidate = can.Id,
                             RefreshToken = refToken,
-                            createAt = DateTime.Now.AddDays(1),
+                            CreateAt = DateTime.Now.AddDays(1),
                         };
 
                         await _context.KeyTokens.AddAsync(keyToken);
@@ -641,7 +641,7 @@ namespace PharmacyOnline.Services.Candidate
                     else
                     {
                         oldKeyToken.RefreshToken = refToken;
-                        oldKeyToken.createAt = DateTime.Now.AddDays(1);
+                        oldKeyToken.CreateAt = DateTime.Now.AddDays(1);
 
                     }
 
@@ -665,11 +665,6 @@ namespace PharmacyOnline.Services.Candidate
 
 
                 }
-
-
-                
-
-
 
             }
             catch (Exception ex)

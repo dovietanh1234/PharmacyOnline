@@ -11,7 +11,7 @@ public partial class KeyToken
 
     public string? RefreshToken { get; set; }
 
-    public DateTime? createAt { get; set; }
+    public DateTime? CreateAt { get; set; }
 
     public virtual Candidate IdCandidateNavigation { get; set; } = null!;
 

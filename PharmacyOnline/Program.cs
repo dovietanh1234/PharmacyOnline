@@ -1,6 +1,10 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
 using PharmacyOnline.Services.Candidate;
 using PharmacyOnline.Services.EmailService;
+using PharmacyOnline.Services.Product;
+using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -15,11 +19,9 @@ builder.Services.AddCors(options =>
 {
     options.AddDefaultPolicy(policy =>
     {
-        policy.AllowAnyMethod()
-        .AllowAnyHeader()
-        .AllowCredentials()
-        .AllowAnyMethod();
-
+        policy.AllowAnyOrigin()
+               .AllowAnyMethod()
+               .AllowAnyHeader();
     });
 });
 
@@ -31,9 +33,34 @@ builder.Services.AddControllers()
         options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore
     );
 
-// Khai báo Interface repository:
+// implement Authentication Jwt Bearer:
+
+
+
+builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer(
+    options => {
+
+        options.TokenValidationParameters = new TokenValidationParameters
+        {
+            ValidateAudience = true,
+            ValidateIssuer = true,
+            ValidateLifetime = true,
+            ValidateIssuerSigningKey = true,
+            ValidAudience = builder.Configuration["JWT:Audience"],
+            ValidIssuer = builder.Configuration["JWT:Issuer"],
+            IssuerSigningKey = new SymmetricSecurityKey( Encoding.UTF8.GetBytes(builder.Configuration["JWT:Key"]) )
+        };
+    
+    });
+
+
+
+
+
+// Khai báo Interface repository (DI):
 builder.Services.AddScoped<ICandidateRepo, CandidateRepoClass>();
 builder.Services.AddScoped<IEmailService, EmailRepoClass>();
+builder.Services.AddScoped<IProductRepo, ProductRepoClass>();
 
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
@@ -49,9 +76,13 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
-app.UseStaticFiles();
-
 app.UseCors();
+
+app.UseAuthentication();
+
+app.UseAuthorization();
+
+app.UseStaticFiles();
 
 app.UseHttpsRedirection();
 

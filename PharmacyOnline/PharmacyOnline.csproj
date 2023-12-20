@@ -29,6 +29,10 @@
   <ItemGroup>
     <Folder Include="DTO\Candidate\" />
     <Folder Include="Entities\" />
+    <Folder Include="wwwroot\Uploads\CanThumbnail\" />
+    <Folder Include="wwwroot\Uploads\FileCv\" />
+    <Folder Include="wwwroot\Uploads\ProductImage\" />
+    <Folder Include="wwwroot\Uploads\ProfileThumbnail\" />
   </ItemGroup>
 
 </Project>

@@ -85,3 +85,10 @@ E:\LAST_SEM3_APTECH\Project_BE\PharmacyOnline\PharmacyOnline\bin\Debug\net7.0\Ma
 E:\LAST_SEM3_APTECH\Project_BE\PharmacyOnline\PharmacyOnline\bin\Debug\net7.0\MimeKit.dll
 E:\LAST_SEM3_APTECH\Project_BE\PharmacyOnline\PharmacyOnline\bin\Debug\net7.0\System.Security.Cryptography.Pkcs.dll
 E:\LAST_SEM3_APTECH\Project_BE\PharmacyOnline\PharmacyOnline\bin\Debug\net7.0\runtimes\win\lib\net7.0\System.Security.Cryptography.Pkcs.dll
+E:\LAST_SEM3_APTECH\Project_BE\PharmacyOnline\PharmacyOnline\bin\Debug\net7.0\Google.Apis.dll
+E:\LAST_SEM3_APTECH\Project_BE\PharmacyOnline\PharmacyOnline\bin\Debug\net7.0\Google.Apis.Auth.PlatformServices.dll
+E:\LAST_SEM3_APTECH\Project_BE\PharmacyOnline\PharmacyOnline\bin\Debug\net7.0\Google.Apis.Auth.dll
+E:\LAST_SEM3_APTECH\Project_BE\PharmacyOnline\PharmacyOnline\bin\Debug\net7.0\Google.Apis.Core.dll
+E:\LAST_SEM3_APTECH\Project_BE\PharmacyOnline\PharmacyOnline\bin\Debug\net7.0\System.Management.dll
+E:\LAST_SEM3_APTECH\Project_BE\PharmacyOnline\PharmacyOnline\bin\Debug\net7.0\runtimes\win\lib\net7.0\System.Management.dll
+E:\LAST_SEM3_APTECH\Project_BE\PharmacyOnline\PharmacyOnline\bin\Debug\net7.0\PharmacyOnline.staticwebassets.runtime.json

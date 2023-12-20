@@ -1,7 +1,9 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using PharmacyOnline.Models.Candidate;
 using PharmacyOnline.Services.Candidate;
+using System.Security.Claims;
 
 namespace PharmacyOnline.Controllers.Candidates
 {
@@ -53,10 +55,35 @@ namespace PharmacyOnline.Controllers.Candidates
             return Ok( await  _candidateRepo.refreshToken(model) );
         }
 
-        [HttpPost]
+        [HttpPost, Authorize(Roles = "Candidate")]
         [Route("logout")]
         public async Task<IActionResult> logout(logoutModel model)
         {
+
+            #region CHECK AUTHORIZATION & isUse
+            var identity = HttpContext.User.Identity as ClaimsIdentity;
+            if ( !identity.IsAuthenticated )
+            {
+                return Unauthorized("invalid  token! please try later");
+            }
+
+            int IdCategory = Convert.ToInt32(identity.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value);
+
+            if (model.id != IdCategory)
+            {
+                return Forbid("you do not have permission to access the data ");
+            }
+
+            /* CHECK HACKER GET REFRESHTOKEN
+                 var candidate = _context.Candidate.FirsOrDefault( c => c.Id == IdCategory );
+                 if(candidate == null ) return NotFound("your account is not exist");
+                // check this account has been used at the same time
+                 if( candidate.isUse == true ) return Forbid("Error! has error occurred... please login again");
+                    
+             */
+
+            #endregion
+
             return Ok( await _candidateRepo.logout(model) );
         }
 
