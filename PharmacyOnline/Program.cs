@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using PharmacyOnline.Services.Candidate;
 using PharmacyOnline.Services.EmailService;
+using PharmacyOnline.Services.ManageCandidates;
 using PharmacyOnline.Services.Product;
 using System.Text;
 
@@ -61,6 +62,7 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJw
 builder.Services.AddScoped<ICandidateRepo, CandidateRepoClass>();
 builder.Services.AddScoped<IEmailService, EmailRepoClass>();
 builder.Services.AddScoped<IProductRepo, ProductRepoClass>();
+builder.Services.AddScoped<IManageCanRepo, ManageCanRepoClass>();
 
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle

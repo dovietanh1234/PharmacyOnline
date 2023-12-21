@@ -95,6 +95,5 @@ namespace PharmacyOnline.Controllers.Candidates
         }
 
 
-
     }
 }

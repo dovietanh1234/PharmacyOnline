@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using PharmacyOnline.Entities;
 using PharmacyOnline.Models.ProductModel;
 using PharmacyOnline.Services.Product;
+using System;
 
 namespace PharmacyOnline.Controllers.Products
 {
@@ -117,75 +118,89 @@ namespace PharmacyOnline.Controllers.Products
         [Route("update/tablet")]
         public async Task<IActionResult> updateTablet([FromForm] ProductTablet2 model)
         {
-            #region HANLDE FILE IMAGE
-            string filename = Guid.NewGuid().ToString() + Path.GetExtension(model.thumbnail.FileName);
-
-            var filePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "Uploads/ProductImage");
-
-            if (!Directory.Exists(filePath))
+            if ( model.thumbnail != null )
             {
-                Directory.CreateDirectory(filePath);
+                #region HANLDE FILE IMAGE
+                string filename = Guid.NewGuid().ToString() + Path.GetExtension(model.thumbnail.FileName);
+
+                var filePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "Uploads/ProductImage");
+
+                if (!Directory.Exists(filePath))
+                {
+                    Directory.CreateDirectory(filePath);
+                }
+
+                var upload = Path.Combine(filePath, filename);
+
+                model.thumbnail.CopyTo(new FileStream(upload, FileMode.Create));
+
+                string url = $"{Request.Scheme}://{Request.Host}/Uploads/ProductImage/{filename}";
+
+                #endregion
+
+                return Ok(await _productRepo.UpdateProductTablet(model, url));
             }
 
-            var upload = Path.Combine(filePath, filename);
-
-            model.thumbnail.CopyTo(new FileStream(upload, FileMode.Create));
-
-            string url = $"{Request.Scheme}://{Request.Host}/Uploads/ProductImage/{filename}";
-
-            #endregion
-
-            return Ok( await _productRepo.UpdateProductTablet(model, url) );
+            return Ok(await _productRepo.UpdateProductTablet(model, ""));
         }
 
         [HttpPost]
         [Route("update/capsule")]
         public async Task<IActionResult> updateCapsule([FromForm] ProductCapsule2 model)
         {
-            #region HANLDE FILE IMAGE
-            string filename = Guid.NewGuid().ToString() + Path.GetExtension(model.thumbnail.FileName);
-
-            var filePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "Uploads/ProductImage");
-
-            if (!Directory.Exists(filePath))
+            if (model.thumbnail != null)
             {
-                Directory.CreateDirectory(filePath);
+                #region HANLDE FILE IMAGE
+                string filename = Guid.NewGuid().ToString() + Path.GetExtension(model.thumbnail.FileName);
+
+                var filePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "Uploads/ProductImage");
+
+                if (!Directory.Exists(filePath))
+                {
+                    Directory.CreateDirectory(filePath);
+                }
+
+                var upload = Path.Combine(filePath, filename);
+
+                model.thumbnail.CopyTo(new FileStream(upload, FileMode.Create));
+
+                string url = $"{Request.Scheme}://{Request.Host}/Uploads/ProductImage/{filename}";
+
+                #endregion
+
+                return Ok(await _productRepo.UpdateProductCapsule(model, url));
             }
 
-            var upload = Path.Combine(filePath, filename);
-
-            model.thumbnail.CopyTo(new FileStream(upload, FileMode.Create));
-
-            string url = $"{Request.Scheme}://{Request.Host}/Uploads/ProductImage/{filename}";
-
-            #endregion
-
-            return Ok( await _productRepo.UpdateProductCapsule( model, url ) );
+            return Ok(await _productRepo.UpdateProductCapsule(model, ""));
         }
 
         [HttpPost]
         [Route("update/solid")]
         public async Task<IActionResult> updateSolid([FromForm] ProductLiquid2 model )
         {
-            #region HANLDE FILE IMAGE
-            string filename = Guid.NewGuid().ToString() + Path.GetExtension(model.thumbnail.FileName);
-
-            var filePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "Uploads/ProductImage");
-
-            if (!Directory.Exists(filePath))
+            if ( model.thumbnail != null )
             {
-                Directory.CreateDirectory(filePath);
+                #region HANLDE FILE IMAGE
+                string filename = Guid.NewGuid().ToString() + Path.GetExtension(model.thumbnail.FileName);
+
+                var filePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "Uploads/ProductImage");
+
+                if (!Directory.Exists(filePath))
+                {
+                    Directory.CreateDirectory(filePath);
+                }
+
+                var upload = Path.Combine(filePath, filename);
+
+                model.thumbnail.CopyTo(new FileStream(upload, FileMode.Create));
+
+                string url = $"{Request.Scheme}://{Request.Host}/Uploads/ProductImage/{filename}";
+
+                #endregion
+
+                return Ok(await _productRepo.UpdateProductLiquid(model, url));
             }
-
-            var upload = Path.Combine(filePath, filename);
-
-            model.thumbnail.CopyTo(new FileStream(upload, FileMode.Create));
-
-            string url = $"{Request.Scheme}://{Request.Host}/Uploads/ProductImage/{filename}";
-
-            #endregion
-
-            return Ok( await _productRepo.UpdateProductLiquid(model, url) );
+            return Ok(await _productRepo.UpdateProductLiquid(model, ""));
 
         }
 
