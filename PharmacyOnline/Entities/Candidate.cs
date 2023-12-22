@@ -26,4 +26,6 @@ public partial class Candidate
     public bool? IsUse { get; set; }
 
     public virtual ICollection<KeyToken> KeyTokens { get; set; } = new List<KeyToken>();
+
+    public virtual ICollection<PersonalDetail> PersonalDetails { get; set; } = new List<PersonalDetail>();
 }

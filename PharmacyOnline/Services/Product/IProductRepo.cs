@@ -29,7 +29,7 @@ namespace PharmacyOnline.Services.Product
 
         Task<List<getAll>> filterCate(int? cate, int page, int pagesize = 10);
 
-        Task<List<getAll>> sort(string? sorting, int page, int pagesize = 10);
+        Task<List<getAll>> sortFilterPagin(int? cate, string? sorting, int page, int pagesize = 10);
 
         Task<List<CategoryGet2>> getAllCategories();
 

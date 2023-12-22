@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore;
+using PharmacyOnline.Models.Statistics;
 
 namespace PharmacyOnline.Entities;
 
@@ -23,11 +24,16 @@ public partial class PharmacyOnlineContext : DbContext
 
     public virtual DbSet<Otp> Otps { get; set; }
 
+    public virtual DbSet<PersonalDetail> PersonalDetails { get; set; }
+
     public virtual DbSet<Product> Products { get; set; }
 
     public virtual DbSet<ProductDetail> ProductDetails { get; set; }
 
     public virtual DbSet<RefreshTokenUsed> RefreshTokenUseds { get; set; }
+
+    //CẤU HÌNH STATISTIC
+    public DbSet<StatisticModel> StatisticModel { get; set; }
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
 #warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see http://go.microsoft.com/fwlink/?LinkId=723263.
@@ -35,6 +41,9 @@ public partial class PharmacyOnlineContext : DbContext
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
+        // QUY ĐỊNH CHO STATISTIC KO CÓ KHOÁ PRIMARY KEY:
+        modelBuilder.Entity<StatisticModel>().HasNoKey();
+
         modelBuilder.Entity<Candidate>(entity =>
         {
             entity.HasKey(e => e.Id).HasName("PK__candidat__3213E83FCDCAD0CC");
@@ -133,6 +142,90 @@ public partial class PharmacyOnlineContext : DbContext
                 .HasColumnType("datetime")
                 .HasColumnName("otpSpam");
             entity.Property(e => e.OtpSpamNumber).HasColumnName("otpSpamNumber");
+        });
+
+        modelBuilder.Entity<PersonalDetail>(entity =>
+        {
+            entity.HasKey(e => e.Id).HasName("PK__personal__3213E83FE324900A");
+
+            entity.ToTable("personalDetail");
+
+            entity.Property(e => e.Id)
+                .HasMaxLength(10)
+                .IsUnicode(false)
+                .HasColumnName("id");
+            entity.Property(e => e.Address)
+                .HasMaxLength(250)
+                .IsUnicode(false)
+                .HasColumnName("address");
+            entity.Property(e => e.CandidateId).HasColumnName("candidateId");
+            entity.Property(e => e.CreatedAt)
+                .HasColumnType("datetime")
+                .HasColumnName("createdAt");
+            entity.Property(e => e.Email)
+                .HasMaxLength(70)
+                .IsUnicode(false)
+                .HasColumnName("email");
+            entity.Property(e => e.ExpiryDate)
+                .HasColumnType("datetime")
+                .HasColumnName("expiryDate");
+            entity.Property(e => e.FileCv)
+                .HasMaxLength(255)
+                .IsUnicode(false)
+                .HasColumnName("fileCv");
+            entity.Property(e => e.Fullname)
+                .HasMaxLength(150)
+                .IsUnicode(false)
+                .HasColumnName("fullname");
+            entity.Property(e => e.IsAccepted)
+                .HasMaxLength(50)
+                .IsUnicode(false)
+                .HasColumnName("isAccepted");
+            entity.Property(e => e.IssuedDate)
+                .HasColumnType("datetime")
+                .HasColumnName("issuedDate");
+            entity.Property(e => e.Major)
+                .HasMaxLength(200)
+                .IsUnicode(false)
+                .HasColumnName("major");
+            entity.Property(e => e.Number)
+                .HasMaxLength(20)
+                .IsUnicode(false)
+                .HasColumnName("number");
+            entity.Property(e => e.Reference)
+                .HasMaxLength(255)
+                .IsUnicode(false)
+                .HasColumnName("reference");
+            entity.Property(e => e.ScientificAchievements)
+                .HasMaxLength(200)
+                .IsUnicode(false)
+                .HasColumnName("scientificAchievements");
+            entity.Property(e => e.Skills)
+                .HasColumnType("text")
+                .HasColumnName("skills");
+            entity.Property(e => e.Status)
+                .HasMaxLength(50)
+                .IsUnicode(false)
+                .HasColumnName("status");
+            entity.Property(e => e.Thumbnail)
+                .HasMaxLength(255)
+                .IsUnicode(false)
+                .HasColumnName("thumbnail");
+            entity.Property(e => e.UniversityOrCollege)
+                .HasMaxLength(200)
+                .IsUnicode(false)
+                .HasColumnName("universityOrCollege");
+            entity.Property(e => e.UpdatedAt)
+                .HasColumnType("datetime")
+                .HasColumnName("updatedAt");
+            entity.Property(e => e.WorkExperiences)
+                .HasColumnType("text")
+                .HasColumnName("workExperiences");
+
+            entity.HasOne(d => d.Candidate).WithMany(p => p.PersonalDetails)
+                .HasForeignKey(d => d.CandidateId)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK__personalD__candi__5CD6CB2B");
         });
 
         modelBuilder.Entity<Product>(entity =>

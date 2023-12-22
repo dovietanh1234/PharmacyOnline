@@ -1,5 +1,6 @@
 ﻿using Microsoft.IdentityModel.Tokens;
 using PharmacyOnline.Models.Candidate;
+using PharmacyOnline.Models.Statistics;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
@@ -25,6 +26,19 @@ namespace PharmacyOnline.Common
             // string result = await randomString;
             // return result;
             return await Task.FromResult(number.ToString());
+        }
+
+        public static async Task<string> randomStr(int legth = 6)
+        {
+            Random rd = new Random();
+
+            string character = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+
+            Task<string> task = Task.Run(() => new string( Enumerable.Repeat(character, legth).Select( s => s[rd.Next(s.Length)]).ToArray() ));
+
+            string result = await task;
+
+            return result;
         }
 
         public async Task<string> createToken(payloadToken payload)
@@ -77,6 +91,22 @@ namespace PharmacyOnline.Common
             return new JwtSecurityTokenHandler().WriteToken(token);
         }
 
+        public static DMY getDMY()
+        {
+
+            DateTime times = DateTime.Now;
+            string y = times.ToString("yyyy");
+            string m = times.ToString("MM");
+            string d = times.ToString("dd");
+
+            return new DMY()
+            {
+                date = d,
+                month = m,
+                year = y
+            };
+        }
+       
 
 
 

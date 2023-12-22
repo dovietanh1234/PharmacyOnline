@@ -15,6 +15,7 @@ namespace PharmacyOnline.Services.Product
         private readonly PharmacyOnlineContext _context;
         public static int PAGE_SIZE { get; set; } = 3;
 
+
         public ProductRepoClass(PharmacyOnlineContext context)
         {
             _context = context;
@@ -638,7 +639,7 @@ namespace PharmacyOnline.Services.Product
             }
         }
 
-        public async Task<List<getAll>> sort(string? sorting, int page, int pagesize = 10)
+        public async Task<List<getAll>> sortFilterPagin(int? cate, string? sorting, int page, int pagesize = 10)
         {
             try
             {
@@ -654,6 +655,11 @@ namespace PharmacyOnline.Services.Product
                         case "NAME_DESC": products = products.OrderByDescending(p => p.ProductName); break;
                         default: throw new Exception("please enter name sorting");
                     }
+                }
+
+                if ( cate.HasValue )
+                {
+                    products = products.Where(p => p.CateId == cate);
                 }
 
                 products = products.Include(p => p.Cate);

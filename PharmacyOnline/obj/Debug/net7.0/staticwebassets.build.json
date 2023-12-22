@@ -1,6 +1,6 @@
 {
   "Version": 1,
-  "Hash": "MrUsqkwg6TMM6gTU69s5ImBB1OV2+1Vasx8jFJwUD14=",
+  "Hash": "9o/tG9+czFmQ09/g1lngaLZOkCvo+zWm5NHeKhPpkjA=",
   "Source": "PharmacyOnline",
   "BasePath": "_content/PharmacyOnline",
   "Mode": "Default",
@@ -16,6 +16,57 @@
     }
   ],
   "Assets": [
+    {
+      "Identity": "E:\\LAST_SEM3_APTECH\\Project_BE\\PharmacyOnline\\PharmacyOnline\\wwwroot\\Uploads\\CanThumbnail\\fca88e42-d18b-440d-9beb-5d160d452809.jpg",
+      "SourceId": "PharmacyOnline",
+      "SourceType": "Discovered",
+      "ContentRoot": "E:\\LAST_SEM3_APTECH\\Project_BE\\PharmacyOnline\\PharmacyOnline\\wwwroot\\",
+      "BasePath": "_content/PharmacyOnline",
+      "RelativePath": "Uploads/CanThumbnail/fca88e42-d18b-440d-9beb-5d160d452809.jpg",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\Uploads\\CanThumbnail\\fca88e42-d18b-440d-9beb-5d160d452809.jpg"
+    },
+    {
+      "Identity": "E:\\LAST_SEM3_APTECH\\Project_BE\\PharmacyOnline\\PharmacyOnline\\wwwroot\\Uploads\\FileCv\\20484180-d7a2-43dd-9f45-a026b9d3b673.pdf",
+      "SourceId": "PharmacyOnline",
+      "SourceType": "Discovered",
+      "ContentRoot": "E:\\LAST_SEM3_APTECH\\Project_BE\\PharmacyOnline\\PharmacyOnline\\wwwroot\\",
+      "BasePath": "_content/PharmacyOnline",
+      "RelativePath": "Uploads/FileCv/20484180-d7a2-43dd-9f45-a026b9d3b673.pdf",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\Uploads\\FileCv\\20484180-d7a2-43dd-9f45-a026b9d3b673.pdf"
+    },
+    {
+      "Identity": "E:\\LAST_SEM3_APTECH\\Project_BE\\PharmacyOnline\\PharmacyOnline\\wwwroot\\Uploads\\FileCv\\6c52bc17-b30f-4e9a-a2bf-963b9f0181d8.pdf",
+      "SourceId": "PharmacyOnline",
+      "SourceType": "Discovered",
+      "ContentRoot": "E:\\LAST_SEM3_APTECH\\Project_BE\\PharmacyOnline\\PharmacyOnline\\wwwroot\\",
+      "BasePath": "_content/PharmacyOnline",
+      "RelativePath": "Uploads/FileCv/6c52bc17-b30f-4e9a-a2bf-963b9f0181d8.pdf",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\Uploads\\FileCv\\6c52bc17-b30f-4e9a-a2bf-963b9f0181d8.pdf"
+    },
     {
       "Identity": "E:\\LAST_SEM3_APTECH\\Project_BE\\PharmacyOnline\\PharmacyOnline\\wwwroot\\Uploads\\ProductImage\\20ef4713-63b8-4821-b5e7-0466baa785a7.jpg",
       "SourceId": "PharmacyOnline",
@@ -151,6 +202,23 @@
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
       "OriginalItemSpec": "wwwroot\\Uploads\\ProductImage\\efa0dc88-5584-49af-9a80-fe097992ce71.jpg"
+    },
+    {
+      "Identity": "E:\\LAST_SEM3_APTECH\\Project_BE\\PharmacyOnline\\PharmacyOnline\\wwwroot\\Uploads\\ProfileThumbnail\\fe8b9e92-c4c2-4943-b733-5b3f06903769.jpg",
+      "SourceId": "PharmacyOnline",
+      "SourceType": "Discovered",
+      "ContentRoot": "E:\\LAST_SEM3_APTECH\\Project_BE\\PharmacyOnline\\PharmacyOnline\\wwwroot\\",
+      "BasePath": "_content/PharmacyOnline",
+      "RelativePath": "Uploads/ProfileThumbnail/fe8b9e92-c4c2-4943-b733-5b3f06903769.jpg",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\Uploads\\ProfileThumbnail\\fe8b9e92-c4c2-4943-b733-5b3f06903769.jpg"
     }
   ]
 }

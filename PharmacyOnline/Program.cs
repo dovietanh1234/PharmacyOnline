@@ -5,6 +5,8 @@ using PharmacyOnline.Services.Candidate;
 using PharmacyOnline.Services.EmailService;
 using PharmacyOnline.Services.ManageCandidates;
 using PharmacyOnline.Services.Product;
+using PharmacyOnline.Services.ProfileService;
+using PharmacyOnline.Services.Statistics;
 using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -63,6 +65,8 @@ builder.Services.AddScoped<ICandidateRepo, CandidateRepoClass>();
 builder.Services.AddScoped<IEmailService, EmailRepoClass>();
 builder.Services.AddScoped<IProductRepo, ProductRepoClass>();
 builder.Services.AddScoped<IManageCanRepo, ManageCanRepoClass>();
+builder.Services.AddScoped<IProfileRepo, ProfileRepoClass>();
+builder.Services.AddScoped<IStatistics, StatisticsRepoClass>();
 
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle

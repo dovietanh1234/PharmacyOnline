@@ -226,10 +226,10 @@ namespace PharmacyOnline.Controllers.Products
         }
 
         [HttpGet]
-        [Route("sort/product")]
-        public async Task<IActionResult> sort(string? sorting, int page = 1)
+        [Route("sort/filter/paginate/product")]
+        public async Task<IActionResult> sort(int? cate, string? sorting, int page = 1)
         {
-            return Ok( await _productRepo.sort(sorting, page));
+            return Ok( await _productRepo.sortFilterPagin(cate, sorting, page));
         }
 
         [HttpGet]
