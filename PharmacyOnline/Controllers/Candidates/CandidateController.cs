@@ -19,6 +19,14 @@ namespace PharmacyOnline.Controllers.Candidates
         }
 
         [HttpPost]
+        [Route("admin/createAccount")]
+        public async Task<IActionResult> registerAdmin(AdminModel model)
+        {
+
+            return Ok(await _candidateRepo.createAdminAccount(model));
+        }
+
+        [HttpPost]
         [Route("register")]
         public async Task<IActionResult> register(candidateModel model)
         {

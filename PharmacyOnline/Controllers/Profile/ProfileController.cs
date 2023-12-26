@@ -3,11 +3,12 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using PharmacyOnline.Entities;
+using PharmacyOnline.Models.Candidate;
 using PharmacyOnline.Models.ProfileModel;
 using PharmacyOnline.Services.ProfileService;
 using System.Security.Claims;
 
-namespace PharmacyOnline.Controllers
+namespace PharmacyOnline.Controllers.Profile
 {
     [Route("api/[controller]")]
     [ApiController]
@@ -22,15 +23,15 @@ namespace PharmacyOnline.Controllers
             _context = context;
         }
 
-        [HttpPost] // , Authorize(Roles = "Candidate")
+        [HttpPost, Authorize(Roles = "Candidate")] 
         [Route("create/profile")]
-        public async Task<IActionResult> createProfile([FromForm]ProfileModel model)
+        public async Task<IActionResult> createProfile(ProfileModel model)
         {
 
-            
+
             try
             {
-                /*  #region GET ID THROUGH TOKEN
+                  #region GET ID THROUGH TOKEN
                 var identity = HttpContext.User.Identity as ClaimsIdentity;
                 if (!identity.IsAuthenticated)
                 {
@@ -38,15 +39,14 @@ namespace PharmacyOnline.Controllers
                 }
 
                 int idCandidate = Convert.ToInt32(identity.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value);
-                #endregion*/
-
-                int idCandidate = 8;
+                #endregion
 
                 // check 2 file has value:
-                if ( model.FileCv == null && model.Thumbnail == null )
+                if (model.FileCv == null && model.Thumbnail == null)
                 {
                     return Ok(await _ProfileService.createProfile(model, idCandidate, "", ""));
-                }else if(model.FileCv != null && model.Thumbnail != null)
+                }
+                else if (model.FileCv != null && model.Thumbnail != null)
                 {
                     #region HANLDE FILE IMAGE
                     string filename = Guid.NewGuid().ToString() + Path.GetExtension(model.Thumbnail.FileName);
@@ -85,7 +85,8 @@ namespace PharmacyOnline.Controllers
 
                     return Ok(await _ProfileService.createProfile(model, idCandidate, fileThumbnail, fileCV));
 
-                }else if (model.FileCv != null && model.Thumbnail == null)
+                }
+                else if (model.FileCv != null && model.Thumbnail == null)
                 {
                     string filename2 = Guid.NewGuid().ToString() + Path.GetExtension(model.FileCv.FileName);
                     var filePath2 = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "Uploads/FileCv");
@@ -98,7 +99,8 @@ namespace PharmacyOnline.Controllers
                     string fileCV = $"{Request.Scheme}://{Request.Host}/Uploads/FileCv/{filename2}";
 
                     return Ok(await _ProfileService.createProfile(model, idCandidate, "", fileCV));
-                }else if (model.FileCv == null && model.Thumbnail != null)
+                }
+                else if (model.FileCv == null && model.Thumbnail != null)
                 {
                     string filename = Guid.NewGuid().ToString() + Path.GetExtension(model.Thumbnail.FileName);
                     var filePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "Uploads/ProfileThumbnail");
@@ -115,22 +117,23 @@ namespace PharmacyOnline.Controllers
 
                 return BadRequest("Error! has error occured");
 
-            }catch(Exception ex)
+            }
+            catch (Exception ex)
             {
                 return BadRequest(ex.Message);
             }
         }
 
 
-        [HttpPost] // , Authorize(Roles = "Candidate")
+        [HttpPost, Authorize(Roles = "Candidate")] 
         [Route("update/profile")]
-        public async Task<IActionResult> updateProfile([FromForm] ProfileModel model, string idProfileDetail)
+        public async Task<IActionResult> updateProfile(ProfileModel model, string idProfileDetail)
         {
 
 
             try
             {
-                /*  #region GET ID THROUGH TOKEN
+                #region GET ID THROUGH TOKEN
                 var identity = HttpContext.User.Identity as ClaimsIdentity;
                 if (!identity.IsAuthenticated)
                 {
@@ -138,7 +141,20 @@ namespace PharmacyOnline.Controllers
                 }
 
                 int idCandidate = Convert.ToInt32(identity.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value);
-                #endregion*/
+
+                if (idCandidate != model.IdCandidate)
+                {
+                    return BadRequest( new
+                    {
+                        status= 403,
+                        statusMessage = "you are not allow to access data"
+                    } );
+                }
+
+                #endregion
+
+                
+
 
 
                 // check 2 file has value:
@@ -224,39 +240,138 @@ namespace PharmacyOnline.Controllers
             }
         }
 
-        [HttpPost] // , Authorize(Roles = "Candidate")
+        [HttpPost, Authorize(Roles = "Candidate")] 
         [Route("submit/profile")]
-        public async Task<IActionResult> submitProfile(string idProfileDetail)
+        public async Task<IActionResult> submitProfile(int idCandidate,string idProfileDetail)
         {
+            #region GET ID THROUGH TOKEN
+            var identity = HttpContext.User.Identity as ClaimsIdentity;
+            if (!identity.IsAuthenticated)
+            {
+                return Unauthorized("invalid  token! please try later");
+            }
+
+            int idCandidate2 = Convert.ToInt32(identity.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value);
+
+            if (idCandidate2 != idCandidate)
+            {
+                return BadRequest(new
+                {
+                    status = 403,
+                    statusMessage = "you are not allow to access data"
+                });
+            }
+
+            #endregion
+
             return Ok(await _ProfileService.Submit(idProfileDetail));
         }
 
-        [HttpGet] // , Authorize(Roles = "Candidate")
+        [HttpGet, Authorize(Roles = "Candidate")] 
         [Route("cancel/submitted")]
-        public async Task<IActionResult> cancelSubmitted(string idProfileDetail)
+        public async Task<IActionResult> cancelSubmitted(int idCandidate, string idProfileDetail)
         {
-            return Ok( await _ProfileService.cancelSubmitted(idProfileDetail) );
+            #region GET ID THROUGH TOKEN
+            var identity = HttpContext.User.Identity as ClaimsIdentity;
+            if (!identity.IsAuthenticated)
+            {
+                return Unauthorized("invalid  token! please try later");
+            }
+
+            int idCandidate2 = Convert.ToInt32(identity.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value);
+
+            if (idCandidate2 != idCandidate)
+            {
+                return BadRequest(new
+                {
+                    status = 403,
+                    statusMessage = "you are not allow to access data"
+                });
+            }
+
+            #endregion
+
+            return Ok(await _ProfileService.cancelSubmitted(idProfileDetail));
         }
 
-        [HttpGet] // , Authorize(Roles = "Candidate")
+        [HttpGet, Authorize(Roles = "Candidate")] 
         [Route("delete/resume")]
-        public async Task<IActionResult> deleteResume(string idProfileDetail)
+        public async Task<IActionResult> deleteResume(int idCandidate, string idProfileDetail)
         {
+            #region GET ID THROUGH TOKEN
+            var identity = HttpContext.User.Identity as ClaimsIdentity;
+            if (!identity.IsAuthenticated)
+            {
+                return Unauthorized("invalid  token! please try later");
+            }
+
+            int idCandidate2 = Convert.ToInt32(identity.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value);
+
+            if (idCandidate2 != idCandidate)
+            {
+                return BadRequest(new
+                {
+                    status = 403,
+                    statusMessage = "you are not allow to access data"
+                });
+            }
+
+            #endregion
+
             return Ok(await _ProfileService.deleteSubmitted(idProfileDetail));
         }
 
-        [HttpGet] // , Authorize(Roles = "Candidate")
+        [HttpGet, Authorize(Roles = "Candidate")] 
         [Route("get/resume")]
-        public async Task<IActionResult> getLocal(int candidateId)
+        public async Task<IActionResult> getLocal(int idCandidate)
         {
-            return Ok(await _ProfileService.GetPLocal(candidateId));
+            #region GET ID THROUGH TOKEN
+            var identity = HttpContext.User.Identity as ClaimsIdentity;
+            if (!identity.IsAuthenticated)
+            {
+                return Unauthorized("invalid  token! please try later");
+            }
+
+            int idCandidate2 = Convert.ToInt32(identity.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value);
+
+            if (idCandidate2 != idCandidate)
+            {
+                return BadRequest(new
+                {
+                    status = 403,
+                    statusMessage = "you are not allow to access data"
+                });
+            }
+
+            #endregion
+            return Ok(await _ProfileService.GetPLocal(idCandidate));
         }
 
-        [HttpGet] // , Authorize(Roles = "Candidate")
+        [HttpGet, Authorize(Roles = "Candidate")] 
         [Route("get/history/resume")]
-        public async Task<IActionResult> getHistory(int candidateId)
+        public async Task<IActionResult> getHistory(int idCandidate)
         {
-            return Ok(await _ProfileService.GetHistory(candidateId));
+            #region GET ID THROUGH TOKEN
+            var identity = HttpContext.User.Identity as ClaimsIdentity;
+            if (!identity.IsAuthenticated)
+            {
+                return Unauthorized("invalid  token! please try later");
+            }
+
+            int idCandidate2 = Convert.ToInt32(identity.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value);
+
+            if (idCandidate2 != idCandidate)
+            {
+                return BadRequest(new
+                {
+                    status = 403,
+                    statusMessage = "you are not allow to access data"
+                });
+            }
+
+            #endregion
+
+            return Ok(await _ProfileService.GetHistory(idCandidate));
         }
 
 
@@ -264,28 +379,28 @@ namespace PharmacyOnline.Controllers
 
         //string idProfileDetail, int isQualified, string? body
 
-        [HttpPost] // , Authorize(Roles = "Admin")
+        [HttpPost, Authorize(Roles = "Admin")]  
         [Route("admin/approved/profile")]
-        public async Task<IActionResult> AdminApprovedProfile(string idProfileDetail, int isQualified, string? body = "")
+        public async Task<IActionResult> AdminApprovedProfile(approvedCV model)
         {
-            return Ok(await _ProfileService.ApprovingAdmin(idProfileDetail, isQualified, body));
+            return Ok(await _ProfileService.ApprovingAdmin(model.idProfileDetail, model.isQualified, model.body));
         }
 
-        [HttpGet] // , Authorize(Roles = "Admin")
+        [HttpGet, Authorize(Roles = "Admin")] 
         [Route("admin/search/sdt/email")]
         public async Task<IActionResult> AdminGetSubmitP(string search, int page = 1)
         {
             return Ok(await _ProfileService.searchSdtGmailAdmin(search, page));
         }
 
-        [HttpGet] // , Authorize(Roles = "Admin")
+        [HttpGet, Authorize(Roles = "Admin")]  
         [Route("admin/get/profile/submit")]
         public async Task<IActionResult> AdminGetSubmitP(int page = 1)
         {
             return Ok(await _ProfileService.GetListSubmittedAdmin(page));
         }
 
-        [HttpGet] // , Authorize(Roles = "Admin")
+        [HttpGet, Authorize(Roles = "Admin")]  
         [Route("admin/get/history/resume")]
         public async Task<IActionResult> adminGetHistory(int page = 1)
         {
@@ -293,7 +408,12 @@ namespace PharmacyOnline.Controllers
         }
 
 
-
+        [HttpGet, Authorize(Roles = "Admin")]  
+        [Route("admin/get/detail/resume")]
+        public async Task<IActionResult> detailCV(string IdProfile)
+        {
+            return Ok(await _ProfileService.detailProfile(IdProfile));
+        }
 
 
 
@@ -304,7 +424,7 @@ namespace PharmacyOnline.Controllers
 
         // File cho admin có thể tải file cv và xem file cv của ứng viên | MAI TEST LẠI API NÀY ĐỔI LẠI ĐƯỜNG DẪN PATH VÀO LẤY DỮ LIỆU
         // install MimeTypes 4.0.0
-        [HttpGet] // , Authorize(Roles = "Admin")
+        [HttpGet, Authorize(Roles = "Admin")] 
         [Route("download/fileCV")]
         public async Task<IActionResult> DownloadFile(string idProfileDetail)
         {
@@ -315,7 +435,7 @@ namespace PharmacyOnline.Controllers
 
                 if (profileDT == null) return NotFound("not found the data");
 
-                if ( string.IsNullOrEmpty(profileDT.FileCv) )
+                if (string.IsNullOrEmpty(profileDT.FileCv))
                 {
                     return BadRequest("this profile doesnt have profile CV file");
                 }
@@ -325,7 +445,7 @@ namespace PharmacyOnline.Controllers
                 string result = profileDT.FileCv;
 
                 // lấy vị trí cuối cùng của "/"
-                int lastIndex = result.LastIndexOf('/'); 
+                int lastIndex = result.LastIndexOf('/');
                 // cắt chuỗi từ vị trí "/" + 1 đến hết chuỗi
                 string filename = result.Substring(lastIndex + 1);
 
@@ -352,7 +472,7 @@ namespace PharmacyOnline.Controllers
                 // trả về như một file stream result:
                 return File(memory, mimeType, Path.GetFileName(filePath));
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 return BadRequest(ex.Message);
             }

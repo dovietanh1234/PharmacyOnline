@@ -5,6 +5,8 @@ namespace PharmacyOnline.Models.ProfileModel
     public class ProfileModel
     {
         [Required]
+        public int IdCandidate { get; set; }
+        [Required]
         public string? Fullname { get; set; }
         public string? Address { get; set; } = "";
         [Required]

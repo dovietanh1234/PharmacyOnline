@@ -564,16 +564,19 @@ namespace PharmacyOnline.Services.ProfileService
 
                 foreach (var p in personalDT)
                 {
-                    newL.Add(new ProfileDTO
+                    if (p.Status != "EDIT")
                     {
-                        Id = p.Id,
-                        fullname = p.Fullname,
-                        Email = p.Email,
-                        Number = p.Number,
-                        University = p.UniversityOrCollege,
-                        status = p.Status,
-                        isAccepted = p.IsAccepted
-                    });
+                        newL.Add(new ProfileDTO
+                        {
+                            Id = p.Id,
+                            fullname = p.Fullname,
+                            Email = p.Email,
+                            Number = p.Number,
+                            University = p.UniversityOrCollege,
+                            status = p.Status,
+                            isAccepted = p.IsAccepted
+                        });
+                    }
                 }
 
                 return newL;
@@ -584,6 +587,9 @@ namespace PharmacyOnline.Services.ProfileService
                 return newL;
             }
         }
+
+
+
 
 
         public async Task<object> ApprovingAdmin(string idProfileDetail, int isQualified, string? body)
@@ -615,7 +621,7 @@ namespace PharmacyOnline.Services.ProfileService
                         Element.Status = "CHECKED";
                         Element.IsAccepted = "QUALIFIED";
 
-                        if (!string.IsNullOrEmpty(candidate.Email) || !string.IsNullOrEmpty(body))
+                        if (!string.IsNullOrEmpty(candidate.Email) && !string.IsNullOrEmpty(body))
                         {
                             _IEmailService.sendData(candidate.Email, body);
                         }

@@ -17,13 +17,14 @@ namespace PharmacyOnline.Services.ManageCandidates
 
         public async Task<List<ListCans>> getListCans(int page)
         {
+            List<ListCans> listCans = new List<ListCans>();
             try
             {
 
                 var cans = _context.Candidates.AsQueryable();
                 var results = PaginationList<Entities.Candidate>.Create(cans, page, 10);
 
-                List<ListCans> listCans = new List<ListCans>();
+                
 
                 foreach (var candidate in results)
                 {
@@ -40,7 +41,7 @@ namespace PharmacyOnline.Services.ManageCandidates
                 return listCans;
             }catch (Exception ex)
             {
-                throw new Exception($"{ex.Message}");
+                return listCans;
             }
         }
 
@@ -48,12 +49,13 @@ namespace PharmacyOnline.Services.ManageCandidates
 
         public async Task<List<ListCans>> searchCans(string search, int page)
         {
+            List<ListCans> listCans = new List<ListCans>();
             try
             {
                 var cans = _context.Candidates.AsQueryable().Where( c => (c.Username.Contains(search) || c.Email.Contains(search)) );
                 var results = PaginationList<Entities.Candidate>.Create(cans, page, 10);
 
-                List<ListCans> listCans = new List<ListCans>();
+                
 
                 foreach (var candidate in results)
                 {
@@ -71,7 +73,7 @@ namespace PharmacyOnline.Services.ManageCandidates
             }
             catch(Exception ex)
             {
-                throw new Exception($"{ ex.Message }");
+                return listCans;
             }
         }
 
@@ -99,7 +101,7 @@ namespace PharmacyOnline.Services.ManageCandidates
             }
             catch (Exception ex)
             {
-                throw new Exception($"{ex.Message}");
+                return new result { status = 401, statusMessage = $"Error! has error occured ${ex}" };
             }
         }
 
@@ -123,7 +125,7 @@ namespace PharmacyOnline.Services.ManageCandidates
             }
             catch (Exception ex)
             {
-                throw new Exception($"{ex.Message}");
+                return new result { status = 401, statusMessage = $"Error! has error occured ${ex}" };
             }
         }
 
@@ -151,29 +153,9 @@ namespace PharmacyOnline.Services.ManageCandidates
             }
             catch (Exception ex)
             {
-                throw new Exception($"{ex.Message}");
+                return new result { status = 401, statusMessage = $"Error! has error occured ${ex}" };
             }
         }
-
-        /*
-            try{
-                
-            }catch(Exception ex){
-                throw new Exception( $"{ex.Message}" );
-            }
-         */
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 

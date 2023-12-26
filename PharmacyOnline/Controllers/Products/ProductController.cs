@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using PharmacyOnline.Entities;
 using PharmacyOnline.Models.ProductModel;
@@ -18,7 +19,7 @@ namespace PharmacyOnline.Controllers.Products
             _productRepo = productRepo;
         }
 
-        [HttpPost]
+        [HttpPost, Authorize(Roles = "Admin")]
         [Route("add/product/tablet")]
         public async Task<IActionResult> CreateProductTablet([FromForm]ProductTablet model)
         {
@@ -45,7 +46,7 @@ namespace PharmacyOnline.Controllers.Products
         }
 
 
-        [HttpPost]
+        [HttpPost, Authorize(Roles = "Admin")]
         [Route("add/product/capsule")]
         public async Task<IActionResult> CreateProductCapsule([FromForm] ProductCapsule model)
         {
@@ -71,7 +72,7 @@ namespace PharmacyOnline.Controllers.Products
 
         }
 
-        [HttpPost]
+        [HttpPost, Authorize(Roles = "Admin")]
         [Route("add/product/liquid")]
         public async Task<IActionResult> CreateProductLiquid([FromForm] ProductLiquid model)
         {
@@ -107,14 +108,14 @@ namespace PharmacyOnline.Controllers.Products
 
 
         [HttpGet]
-        [Route("get/detail")]
+        [Route("get/product/detail")]
         public async Task<IActionResult> getDetail(int idProduct)
         {
             return Ok( await _productRepo.detailProduct(idProduct) );
         }
 
 
-        [HttpPost]
+        [HttpPost, Authorize(Roles = "Admin")]
         [Route("update/tablet")]
         public async Task<IActionResult> updateTablet([FromForm] ProductTablet2 model)
         {
@@ -144,7 +145,7 @@ namespace PharmacyOnline.Controllers.Products
             return Ok(await _productRepo.UpdateProductTablet(model, ""));
         }
 
-        [HttpPost]
+        [HttpPost, Authorize(Roles = "Admin")]
         [Route("update/capsule")]
         public async Task<IActionResult> updateCapsule([FromForm] ProductCapsule2 model)
         {
@@ -174,7 +175,7 @@ namespace PharmacyOnline.Controllers.Products
             return Ok(await _productRepo.UpdateProductCapsule(model, ""));
         }
 
-        [HttpPost]
+        [HttpPost, Authorize(Roles = "Admin")]
         [Route("update/solid")]
         public async Task<IActionResult> updateSolid([FromForm] ProductLiquid2 model )
         {
@@ -204,7 +205,7 @@ namespace PharmacyOnline.Controllers.Products
 
         }
 
-        [HttpGet]
+        [HttpGet, Authorize(Roles = "Admin")]
         [Route("delete/product")]
         public async Task<IActionResult> deleteP(int productId)
         {
@@ -233,7 +234,7 @@ namespace PharmacyOnline.Controllers.Products
         }
 
         [HttpGet]
-        [Route("getall/categories")]
+        [Route("getAll/categories")]
         public async Task<IActionResult> category()
         {
             return Ok(await _productRepo.getAllCategories());

@@ -92,3 +92,5 @@ E:\LAST_SEM3_APTECH\Project_BE\PharmacyOnline\PharmacyOnline\bin\Debug\net7.0\Go
 E:\LAST_SEM3_APTECH\Project_BE\PharmacyOnline\PharmacyOnline\bin\Debug\net7.0\System.Management.dll
 E:\LAST_SEM3_APTECH\Project_BE\PharmacyOnline\PharmacyOnline\bin\Debug\net7.0\runtimes\win\lib\net7.0\System.Management.dll
 E:\LAST_SEM3_APTECH\Project_BE\PharmacyOnline\PharmacyOnline\bin\Debug\net7.0\PharmacyOnline.staticwebassets.runtime.json
+E:\LAST_SEM3_APTECH\Project_BE\PharmacyOnline\PharmacyOnline\bin\Debug\net7.0\Google.Apis.Sheets.v4.dll
+E:\LAST_SEM3_APTECH\Project_BE\PharmacyOnline\PharmacyOnline\bin\Debug\net7.0\eloquent-figure-409302-ae6d2cc39f9e.json

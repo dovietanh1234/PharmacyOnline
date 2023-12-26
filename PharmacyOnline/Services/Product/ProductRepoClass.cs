@@ -21,14 +21,18 @@ namespace PharmacyOnline.Services.Product
             _context = context;
         }
 
-        public async Task<ProductTabletDTO> AddProductTablet(ProductTablet model, string url)
+        public async Task<object> AddProductTablet(ProductTablet model, string url)
         {
             try
             {
                 var cate = await _context.Categories.FirstOrDefaultAsync(c => c.Id == model.cateId);
                 if(cate == null)
                 {
-                    throw new Exception("there is no cate in DB");
+                    return new result
+                    {
+                        status = 404,
+                        statusMessage = "category is not exist"
+                    };
                 }
 
                 ProductDetail productDetailnew = new ProductDetail()
@@ -88,19 +92,27 @@ namespace PharmacyOnline.Services.Product
             }
             catch (Exception ex)
             {
-                throw new Exception($"{ex}");
+                return new result
+                {
+                    status = 401,
+                    statusMessage = $"Error! has error occured {ex}"
+                };
             }
         }
 
 
-        public async Task<ProductCapsuleDTO> AddProductCapsule(ProductCapsule model, string url)
+        public async Task<object> AddProductCapsule(ProductCapsule model, string url)
         {
             try
             {
                 var cate = await _context.Categories.FirstOrDefaultAsync(c => c.Id == model.cateId);
                 if (cate == null)
                 {
-                    throw new Exception("there is no cate in DB");
+                    return new result
+                    {
+                        status = 404,
+                        statusMessage = $"not found the category"
+                    };
                 }
 
 
@@ -150,18 +162,26 @@ namespace PharmacyOnline.Services.Product
             }
             catch (Exception ex)
             {
-                throw new Exception($"{ex}");
+                return new result
+                {
+                    status = 401,
+                    statusMessage = $"Error! has error occured {ex}"
+                };
             }
         }
 
-        public async Task<ProductLiquidDTO> AddProductLiquid(ProductLiquid model, string url)
+        public async Task<object> AddProductLiquid(ProductLiquid model, string url)
         {
             try
             {
                 var cate = await _context.Categories.FirstOrDefaultAsync(c => c.Id == model.cateId);
                 if (cate == null)
                 {
-                    throw new Exception("there is no cate in DB");
+                    return new result
+                    {
+                        status = 404,
+                        statusMessage = $"not found the category"
+                    };
                 }
 
                 ProductDetail productDetailnew = new ProductDetail()
@@ -214,20 +234,25 @@ namespace PharmacyOnline.Services.Product
             }
             catch(Exception ex)
             {
-                throw new Exception($"{ex}");
+                return new result
+                {
+                    status = 401,
+                    statusMessage = $"Error! has error occured {ex}"
+                };
             }
         }
 
 
         public async Task<List<getAll>> getProductPaginate(int page, int pagesize)
         {
+            List<getAll> new_list = new List<getAll>();
             try
             {
                 var products = _context.Products.AsQueryable().Include(p => p.Cate);
 
                 var result = PaginationList<Entities.Product>.Create(products, page, pagesize > 3 ? pagesize : PAGE_SIZE);
 
-                List<getAll> new_list = new List<getAll>();
+               
 
                 foreach(var product in result)
                 {
@@ -251,11 +276,11 @@ namespace PharmacyOnline.Services.Product
 
             }catch(Exception ex)
             {
-                throw new Exception($"{ex}");
+                return new_list;
             }
         }
 
-        public async Task<Object> detailProduct(int idProduct)
+        public async Task<object> detailProduct(int idProduct)
         {
             try
             {
@@ -363,11 +388,11 @@ namespace PharmacyOnline.Services.Product
             }
             catch (Exception ex)
             {
-                throw new Exception($"{ex}");
+                return new result { status = 401, statusMessage = $"Error! has error occured {ex}" };
             }
         }
 
-        public async Task<ProductTabletDTO> UpdateProductTablet(ProductTablet2 model, string url)
+        public async Task<object> UpdateProductTablet(ProductTablet2 model, string url)
         {
             try
             {
@@ -375,14 +400,26 @@ namespace PharmacyOnline.Services.Product
 
                 if ( product == null )
                 {
-                    throw new Exception("data not found");
+                    return new result
+                    {
+                        status = 404,
+                        statusMessage = $"not found Product"
+                    };
                 }
-
-                if (product.CateId != 3) throw new Exception("Error! has error occured! category Id is wrong ");
+                // ví category product tablet == 3 -> nếu khác 3 thì sẽ sai ... case này nếu == 3 thì sẽ ko vào case if này
+                if (product.CateId != 3) return new result
+                {
+                    status = 401,
+                    statusMessage = $"not found Product tablet"
+                };
 
                 var cate = await _context.Categories.FirstOrDefaultAsync( c => c.Id == product.CateId);
                 var productDt = await _context.ProductDetails.FirstOrDefaultAsync( pd => pd.Id == product.ProductDetailId );
-                if ( cate == null || productDt == null ) throw new Exception("data not found");
+                if ( cate == null || productDt == null) return new result
+                {
+                    status = 404,
+                    statusMessage = $"not found Product & cate"
+                };
 
                 product.ProductName = model.productName==""?product.ProductName:model.productName;
                 product.Title = model.title==""?product.Title:model.title;
@@ -424,9 +461,16 @@ namespace PharmacyOnline.Services.Product
                 };
 
             }
-            catch (Exception ex) { throw new Exception($"{ex}"); }
+            catch (Exception ex)
+            {
+                return new result
+                {
+                    status = 401,
+                    statusMessage = $"Error! has error occured {ex}"
+                };
+            }
         }
-        public async Task<ProductCapsuleDTO> UpdateProductCapsule(ProductCapsule2 model, string url)
+        public async Task<object> UpdateProductCapsule(ProductCapsule2 model, string url)
         {
             try
             {
@@ -434,13 +478,25 @@ namespace PharmacyOnline.Services.Product
 
                 if (product == null)
                 {
-                    throw new Exception("data not found");
+                    return new result
+                    {
+                        status = 401,
+                        statusMessage = $"Not found product"
+                    };
                 }
-                if (product.CateId != 1) throw new Exception("Error! has error occured! category Id is wrong ");
+                if (product.CateId != 1) return new result
+                {
+                    status = 401,
+                    statusMessage = $"not found Product capsule"
+                };
 
                 var cate = await _context.Categories.FirstOrDefaultAsync(c => c.Id == product.CateId);
                 var productDt = await _context.ProductDetails.FirstOrDefaultAsync(pd => pd.Id == product.ProductDetailId);
-                if (cate == null || productDt == null) throw new Exception("data not found");
+                if (cate == null || productDt == null) return new result
+                {
+                    status = 401,
+                    statusMessage = $"not found Product & capsule"
+                };
 
                 product.ProductName = model.productName == "" ? product.ProductName : model.productName;
                 product.Title = model.title == "" ? product.Title : model.title;
@@ -477,9 +533,16 @@ namespace PharmacyOnline.Services.Product
 
 
             }
-            catch (Exception ex) { throw new Exception($"{ex}"); }
+            catch (Exception ex)
+            {
+                return new result
+                {
+                    status = 401,
+                    statusMessage = $"Error! has error occured {ex}"
+                };
+            }
         }
-        public async Task<ProductLiquidDTO> UpdateProductLiquid(ProductLiquid2 model, string url)
+        public async Task<object> UpdateProductLiquid(ProductLiquid2 model, string url)
         {
             try
             {
@@ -487,14 +550,26 @@ namespace PharmacyOnline.Services.Product
 
                 if (product == null)
                 {
-                    throw new Exception("data not found");
+                    return new result
+                    {
+                        status = 404,
+                        statusMessage = $"product not found"
+                    };
                 }
 
-                if (product.CateId != 2) throw new Exception("Error! has error occured! category Id is wrong ");
+                if (product.CateId != 2) return new result
+                {
+                    status = 401,
+                    statusMessage = $"not found Liquid"
+                };
 
                 var cate = await _context.Categories.FirstOrDefaultAsync(c => c.Id == product.CateId);
                 var productDt = await _context.ProductDetails.FirstOrDefaultAsync(pd => pd.Id == product.ProductDetailId);
-                if (cate == null || productDt == null) throw new Exception("data not found");
+                if (cate == null || productDt == null) return new result
+                {
+                    status = 401,
+                    statusMessage = $"data not found"
+                };
 
                 product.ProductName = model.productName == "" ? product.ProductName : model.productName;
                 product.Title = model.title == "" ? product.Title : model.title;
@@ -529,7 +604,14 @@ namespace PharmacyOnline.Services.Product
 
 
             }
-            catch(Exception ex) { throw new Exception($"{ex}"); }
+            catch(Exception ex)
+            {
+                return new result
+                {
+                    status = 401,
+                    statusMessage = $"Error! has error occured {ex}"
+                };
+            }
         }
 
         public async Task<result> DeleteProduct(int ProductId)
@@ -540,13 +622,17 @@ namespace PharmacyOnline.Services.Product
 
                 if ( product == null )
                 {
-                    throw new Exception($"not found product");
+                    return new result { status = 404, statusMessage = "not found product" };
                 }
 
                 var productDT = await _context.ProductDetails.FirstOrDefaultAsync(p => p.Id == product.ProductDetailId );
                 if (productDT == null)
                 {
-                    throw new Exception($"not found product detail");
+                    return new result
+                    {
+                        status = 404,
+                        statusMessage = "not found productDetail"
+                    };
                 }
 
                 _context.Products.Remove(product);
@@ -561,20 +647,25 @@ namespace PharmacyOnline.Services.Product
 
 
             }
-            catch (Exception ex) { 
-                throw new Exception($"{ex}"); 
+            catch (Exception ex) {
+                return new result
+                {
+                    status = 401,
+                    statusMessage = $"Error! has error occured{ex}"
+                };
             }
         }
 
         public async Task<List<getAll>> searchP(string search, int page, int pagesize = 10)
         {
+            List<getAll> new_list = new List<getAll>();
             try
             {
                 var products = _context.Products.AsQueryable().Where( p => (p.ProductName.Contains(search) || p.Title.Contains(search)) ).Include(p => p.Cate);
 
                 var result = PaginationList<Entities.Product>.Create(products, page, pagesize > 3 ? pagesize : PAGE_SIZE);
 
-                List<getAll> new_list = new List<getAll>();
+                
 
                 foreach (var product in result)
                 {
@@ -598,13 +689,14 @@ namespace PharmacyOnline.Services.Product
 
 
             }
-            catch (Exception ex) { 
-                throw new Exception($"{ex}"); 
+            catch (Exception ex) {
+                return new_list;
             }
         }
 
         public async Task<List<getAll>> filterCate(int? cate, int page, int pagesize = 10)
         {
+            List<getAll> new_list = new List<getAll>();
             try
             {
                 var products = _context.Products.AsQueryable().Where(p => p.CateId == cate).Include(p => p.Cate);
@@ -612,7 +704,7 @@ namespace PharmacyOnline.Services.Product
                 
                 var result = PaginationList<Entities.Product>.Create(products, page, pagesize > 3 ? pagesize : PAGE_SIZE);
 
-                List<getAll> new_list = new List<getAll>();
+
 
                 foreach (var product in result)
                 {
@@ -635,12 +727,13 @@ namespace PharmacyOnline.Services.Product
                 return new_list;
             }
             catch (Exception ex) {
-                throw new Exception($"{ex}"); 
+                return new_list;
             }
         }
 
         public async Task<List<getAll>> sortFilterPagin(int? cate, string? sorting, int page, int pagesize = 10)
         {
+             List<getAll> new_list = new List<getAll>();
             try
             {
                 var products = _context.Products.AsQueryable();
@@ -653,7 +746,7 @@ namespace PharmacyOnline.Services.Product
                     {
                         case "NAME_ASC": products = products.OrderBy(p => p.ProductName); break;
                         case "NAME_DESC": products = products.OrderByDescending(p => p.ProductName); break;
-                        default: throw new Exception("please enter name sorting");
+                        default: return new_list;
                     }
                 }
 
@@ -666,7 +759,7 @@ namespace PharmacyOnline.Services.Product
 
                 var result = PaginationList<Entities.Product>.Create(products, page, pagesize > 3 ? pagesize : PAGE_SIZE);
 
-                List<getAll> new_list = new List<getAll>();
+
 
                 foreach (var product in result)
                 {
@@ -690,17 +783,16 @@ namespace PharmacyOnline.Services.Product
 
 
             }
-            catch (Exception ex) { throw new Exception($"{ex}"); }
+            catch (Exception ex) { return new_list; }
         }
 
 
         public async Task<List<CategoryGet2>> getAllCategories()
         {
+            List<CategoryGet2> listC = new List<CategoryGet2>();
             try
             {
                 var cates = await _context.Categories.ToListAsync();
-
-                List<CategoryGet2> listC = new List<CategoryGet2>();
 
                 foreach (var cate in cates)
                 {
@@ -715,7 +807,7 @@ namespace PharmacyOnline.Services.Product
             }
             catch(Exception ex)
             {
-                throw new Exception($"{ex.Message}");
+                return listC;
             }
         }
 

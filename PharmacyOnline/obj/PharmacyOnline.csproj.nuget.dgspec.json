@@ -48,6 +48,10 @@
               "target": "Package",
               "version": "[1.64.0, )"
             },
+            "Google.Apis.Sheets.v4": {
+              "target": "Package",
+              "version": "[1.64.0.3148, )"
+            },
             "MailKit": {
               "target": "Package",
               "version": "[4.2.0, )"

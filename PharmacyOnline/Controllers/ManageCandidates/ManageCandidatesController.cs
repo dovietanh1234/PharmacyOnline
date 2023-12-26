@@ -19,7 +19,7 @@ namespace PharmacyOnline.Controllers.ManageCandidates
             _IManageCan = manageCan;
         }
 
-        [HttpGet]
+        [HttpGet, Authorize(Roles = "Admin")]
         [Route("list/candidates")]
 
         public async Task<IActionResult> Index(int page)
@@ -27,7 +27,7 @@ namespace PharmacyOnline.Controllers.ManageCandidates
             return Ok( await _IManageCan.getListCans(page) );
         }
 
-        [HttpGet]
+        [HttpGet, Authorize(Roles = "Admin")]
         [Route("candidate/search")]
 
         public async Task<IActionResult> search(string keyword, int page)
@@ -37,7 +37,7 @@ namespace PharmacyOnline.Controllers.ManageCandidates
 
 
         [HttpGet, Authorize(Roles = "Candidate")]
-        [Route("get/candidate")]
+        [Route("get/candidate/informs/myself")]
         public async Task<IActionResult> getCandidateToken()
         {
             var identity = HttpContext.User.Identity as ClaimsIdentity;
@@ -51,7 +51,7 @@ namespace PharmacyOnline.Controllers.ManageCandidates
             return Ok(await _IManageCan.getProfileToken(IdCategory));
         }
 
-        [HttpGet]
+        [HttpGet, Authorize(Roles = "Admin")]
         [Route("toggle/candidate")]
 
         public async Task<IActionResult> toggleCand(int id)
@@ -59,11 +59,31 @@ namespace PharmacyOnline.Controllers.ManageCandidates
             return Ok(await _IManageCan.toggleU(id));
         }
 
-        [HttpPost]
+        [HttpPost, Authorize(Roles = "Candidate")]
         [Route("update/candidate")]
 
         public async Task<IActionResult> update([FromForm] updateCan model)
         {
+            #region CHECK TOKEN:
+            var identity = HttpContext.User.Identity as ClaimsIdentity;
+            if (!identity.IsAuthenticated)
+            {
+                return Unauthorized("invalid  token! please try later");
+            }
+
+            int IdCategory = Convert.ToInt32(identity.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value);
+            if ( IdCategory != model.id )
+            {
+                return BadRequest(new
+                {
+                    status = 403,
+                    statusMessage = "you are not allow."
+                });
+            }
+
+
+            #endregion
+
             if ( model.thumbnail != null )
             {
                 #region HANLDE FILE IMAGE

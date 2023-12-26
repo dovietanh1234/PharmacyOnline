@@ -124,6 +124,23 @@
           }
         }
       },
+      "Google.Apis.Sheets.v4/1.64.0.3148": {
+        "type": "package",
+        "dependencies": {
+          "Google.Apis": "1.64.0",
+          "Google.Apis.Auth": "1.64.0"
+        },
+        "compile": {
+          "lib/netstandard2.0/Google.Apis.Sheets.v4.dll": {
+            "related": ".pdb;.xml"
+          }
+        },
+        "runtime": {
+          "lib/netstandard2.0/Google.Apis.Sheets.v4.dll": {
+            "related": ".pdb;.xml"
+          }
+        }
+      },
       "Humanizer.Core/2.14.1": {
         "type": "package",
         "compile": {
@@ -1676,6 +1693,28 @@
         "lib/netstandard2.0/Google.Apis.Core.dll",
         "lib/netstandard2.0/Google.Apis.Core.pdb",
         "lib/netstandard2.0/Google.Apis.Core.xml"
+      ]
+    },
+    "Google.Apis.Sheets.v4/1.64.0.3148": {
+      "sha512": "5BFNlAQO1yjBtjRhKDp4UaA0XmCWIpS7sDNuc1my5jzvGpdbFlHB5uMSuBwXKsSopk2t/lzVDb2hH0fkNCengQ==",
+      "type": "package",
+      "path": "google.apis.sheets.v4/1.64.0.3148",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "LICENSE",
+        "NuGetIcon.png",
+        "google.apis.sheets.v4.1.64.0.3148.nupkg.sha512",
+        "google.apis.sheets.v4.nuspec",
+        "lib/net45/Google.Apis.Sheets.v4.dll",
+        "lib/net45/Google.Apis.Sheets.v4.pdb",
+        "lib/net45/Google.Apis.Sheets.v4.xml",
+        "lib/netstandard1.3/Google.Apis.Sheets.v4.dll",
+        "lib/netstandard1.3/Google.Apis.Sheets.v4.pdb",
+        "lib/netstandard1.3/Google.Apis.Sheets.v4.xml",
+        "lib/netstandard2.0/Google.Apis.Sheets.v4.dll",
+        "lib/netstandard2.0/Google.Apis.Sheets.v4.pdb",
+        "lib/netstandard2.0/Google.Apis.Sheets.v4.xml"
       ]
     },
     "Humanizer.Core/2.14.1": {
@@ -4583,6 +4622,7 @@
     "net7.0": [
       "BCrypt.Net-Next >= 4.0.3",
       "Google.Apis.Auth >= 1.64.0",
+      "Google.Apis.Sheets.v4 >= 1.64.0.3148",
       "MailKit >= 4.2.0",
       "Microsoft.AspNetCore.Authentication.JwtBearer >= 7.0.10",
       "Microsoft.AspNetCore.Mvc.NewtonsoftJson >= 7.0.10",
@@ -4641,6 +4681,10 @@
           "Google.Apis.Auth": {
             "target": "Package",
             "version": "[1.64.0, )"
+          },
+          "Google.Apis.Sheets.v4": {
+            "target": "Package",
+            "version": "[1.64.0.3148, )"
           },
           "MailKit": {
             "target": "Package",

@@ -1,4 +1,7 @@
-﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
+﻿using Google.Apis.Auth.OAuth2;
+using Google.Apis.Services;
+using Google.Apis.Sheets.v4;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using PharmacyOnline.Services.Candidate;
@@ -58,6 +61,17 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJw
 
 
 
+
+string clientSecret = builder.Configuration["GGSHEET:GGSHEETClientSecretPath"];
+builder.Services.AddSingleton(s =>
+{
+    var credential = GoogleCredential.FromStream(new FileStream(clientSecret, FileMode.Open, FileAccess.Read)).CreateScoped(SheetsService.Scope.Spreadsheets);
+    return new SheetsService(new BaseClientService.Initializer
+    {
+        HttpClientInitializer = credential,
+        ApplicationName = builder.Configuration["GGSHEET:GGSHEETNameApplication"]
+    });
+});
 
 
 // Khai báo Interface repository (DI):

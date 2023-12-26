@@ -25,6 +25,53 @@ namespace PharmacyOnline.Services.Candidate
             _emailService = emailService;
         }
 
+       public async Task<object> createAdminAccount(AdminModel model)
+        {
+            try
+            {
+                var salt = BCrypt.Net.BCrypt.GenerateSalt(10);
+
+                var hashed = BCrypt.Net.BCrypt.HashPassword(model.password, salt);
+
+                string randomW = await HandleLogic.create_otp();
+
+                var candidate = new Entities.Candidate
+                {
+                    Username = model.username,
+                    Role = "Admin",
+                    Thumbnail = "https://i.stack.imgur.com/l60Hf.png",
+                    Email = $"admin{randomW}@gmail.com",
+                    Password = hashed,
+                    CreatedAt = DateTime.Now,
+                    IsAtive = true
+                };
+
+                await _context.Candidates.AddAsync(candidate);
+                await _context.SaveChangesAsync();
+                return new
+                {
+                    status = 202,
+                    statusMessage = "create admin account success",
+                    metaData = new
+                    {
+                        Username = model.username,
+                        Thumbnail = "https://i.stack.imgur.com/l60Hf.png",
+                        Email = candidate.Email,
+                        CreatedAt = candidate.CreatedAt
+                    }
+                };
+
+            }
+            catch(Exception ex)
+            {
+                return new result
+                {
+                    status = 401,
+                    statusMessage = $"Error! has error occured{ex}"
+                };
+            }
+        }
+
         public async Task<result> register(candidateModel model)
         {
             try
@@ -81,14 +128,14 @@ namespace PharmacyOnline.Services.Candidate
                 {
                     status = 202,
                     statusMessage = "please check otp in your email"
-                }; ;
+                };
             }
             catch (Exception ex)
             {
                 return new result
                 {
                     status = 401,
-                    statusMessage = "Error! has error occured"
+                    statusMessage = $"Error! has error occured{ex}"
                 };
             }
 

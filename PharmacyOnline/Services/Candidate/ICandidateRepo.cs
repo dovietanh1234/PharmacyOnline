@@ -4,6 +4,7 @@ namespace PharmacyOnline.Services.Candidate
 {
     public interface ICandidateRepo
     {
+        Task<object> createAdminAccount(AdminModel model);
         Task<result> register(candidateModel model);
 
         Task<result> verifyOtp(otpModel model);

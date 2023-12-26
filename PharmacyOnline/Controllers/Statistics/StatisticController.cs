@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
@@ -24,7 +25,7 @@ namespace PharmacyOnline.Controllers.Statistics
 
         }
 
-        [HttpGet]
+        [HttpGet, Authorize(Roles = "Admin")]
         [Route("statistic/month")]
         public async Task<IActionResult> StatisticsMonth() {
 
@@ -38,7 +39,7 @@ namespace PharmacyOnline.Controllers.Statistics
         }
 
 
-        [HttpGet]
+        [HttpGet, Authorize(Roles = "Admin")]
         [Route("statistic/week")]
         public async Task<IActionResult> StatisticsWeek()
         {
@@ -52,7 +53,7 @@ namespace PharmacyOnline.Controllers.Statistics
             });
         }
 
-        [HttpGet]
+        [HttpGet, Authorize(Roles = "Admin")]
         [Route("statistic/day")]
         public async Task<IActionResult> StatisticsDay()
         {

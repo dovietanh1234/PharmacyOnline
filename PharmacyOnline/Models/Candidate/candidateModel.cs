@@ -13,11 +13,38 @@ namespace PharmacyOnline.Models.Candidate
         public string email { get; set; }
 
         [Required(ErrorMessage = "please enter password")]
-        [MinLength(6, ErrorMessage = "enter min 3 character ")]
+        [MinLength(8, ErrorMessage = "enter min 3 character ")]
         [MaxLength(30, ErrorMessage = "your password has exceeded 30 characters ")]
         public string password { get; set; }
 
+        [Required, Compare("password")]
+        public string ConfirmPassword { get; set; } = string.Empty;
+
     }
+
+    /*
+        [Required, MinLength(6)]
+        public string Password { get; set; } = string.Empty;
+
+        [Required, Compare("Password")]
+        public string ConfirmPassword { get; set; } = string.Empty;
+     */
+    public class AdminModel
+    {
+        [Required(ErrorMessage = "please enter username")]
+        [MinLength(3, ErrorMessage = "enter min 3 character ")]
+        [MaxLength(255, ErrorMessage = "enter max 255 character")]
+        public string username { get; set; } = string.Empty;
+
+        [Required(ErrorMessage = "please enter password")]
+        [MinLength(6, ErrorMessage = "enter min 3 character ")]
+        [MaxLength(30, ErrorMessage = "your password has exceeded 30 characters ")]
+        public string password { get; set; } = string.Empty;
+
+        [Required, Compare("password")]
+        public string ConfirmPassword { get; set; } = string.Empty;
+    }
+
 
     public class otpModel
     {
@@ -85,6 +112,13 @@ namespace PharmacyOnline.Models.Candidate
     public class GoogleTokenRequest
     {
         public string token { get; set; }
+    }
+
+    public class approvedCV
+    {
+        public string idProfileDetail { get; set; } = "";
+        public int isQualified { get; set; } = 2;
+        public string? body { get; set; } = "";
     }
 
 }
