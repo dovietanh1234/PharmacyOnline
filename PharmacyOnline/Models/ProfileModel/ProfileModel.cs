@@ -25,5 +25,21 @@ namespace PharmacyOnline.Models.ProfileModel
         public string? WorkExperiences { get; set; } = "";
         public string? Reference { get; set; } = "";
 
+        public string? Age { get; set; } = "";
+
+        public DateTime? DateOfBirth { get; set; } = null;
+
+        public string? Gender { get; set; } = "";
+
     }
+
+    public class emailModel
+    {
+        [EmailAddress]
+        public string? to { get; set; } = "";
+        public string? interviewAddress { get; set; } = "";
+        public DateTime? appointment { get; set; } = null;
+        public string? content { get; set; } = "";
+    }
+
 }

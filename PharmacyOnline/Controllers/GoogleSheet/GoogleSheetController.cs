@@ -20,7 +20,7 @@ namespace PharmacyOnline.Controllers.GoogleSheet
             _configuration = configuration;
         }
 
-
+        // HÀM NÀY ĐƯA DATA TRONG DB VÀO GG SHET
         [HttpGet]
         [Route("insert/data/googleSheet")]
         public async Task<IActionResult> insertDatainGGSheet()
@@ -60,23 +60,20 @@ namespace PharmacyOnline.Controllers.GoogleSheet
 
                 return Ok("send thành công");
 
-
         }
 
 
 
-
+        // hàm này để lấy data từ gg sheet đưa vào DATABASE
         [HttpGet]
         [Route("get/data/googleSheet")]
         public async Task<IActionResult> getData()
         {
-            
-
                 // ID của Google Sheet của bạn
                 var spreadsheetId = _configuration.GetSection("GGSHEET:GGSHEETSpreadSheet").Value;
 
                 // Tên của trang bạn muốn truy cập
-                var range = "Sheet1!A1:E5";
+                var range = "Sheet1!A14:B17";
 
                 var request = _sheetsService.Spreadsheets.Values.Get(spreadsheetId, range);
                 var response = await request.ExecuteAsync();

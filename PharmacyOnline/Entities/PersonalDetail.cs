@@ -46,4 +46,10 @@ public partial class PersonalDetail
     public string? IsAccepted { get; set; }
 
     public virtual Candidate Candidate { get; set; } = null!;
+
+    public string? Age { get; set; }
+
+    public DateTime? DateOfBirth { get; set; }
+
+    public string? Gender { get; set; }
 }

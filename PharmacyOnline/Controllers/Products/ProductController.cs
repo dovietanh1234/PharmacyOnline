@@ -20,10 +20,14 @@ namespace PharmacyOnline.Controllers.Products
         }
 
         [HttpPost, Authorize(Roles = "Admin")]
-        [Route("add/product/tablet")]
+        [Route("admin/create/product/tablet")]
         public async Task<IActionResult> CreateProductTablet([FromForm]ProductTablet model)
         {
             #region HANLDE FILE IMAGE
+            string url = "https://phutungnhapkhauchinhhang.com/wp-content/uploads/2020/06/default-thumbnail.jpg";
+            if ( model.thumbnail != null )
+            {
+
             string filename = Guid.NewGuid().ToString() + Path.GetExtension(model.thumbnail.FileName);
 
             var filePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "Uploads/ProductImage");
@@ -37,9 +41,11 @@ namespace PharmacyOnline.Controllers.Products
 
             model.thumbnail.CopyTo(new FileStream(upload, FileMode.Create));
 
-            string url = $"{Request.Scheme}://{Request.Host}/Uploads/ProductImage/{filename}";
+             url = $"{Request.Scheme}://{Request.Host}/Uploads/ProductImage/{filename}";
 
+            }
             #endregion
+
 
             return Ok(await _productRepo.AddProductTablet(model, url));
 
@@ -47,51 +53,59 @@ namespace PharmacyOnline.Controllers.Products
 
 
         [HttpPost, Authorize(Roles = "Admin")]
-        [Route("add/product/capsule")]
+        [Route("admin/create/product/capsule")]
         public async Task<IActionResult> CreateProductCapsule([FromForm] ProductCapsule model)
         {
             #region HANLDE FILE IMAGE
-            string filename = Guid.NewGuid().ToString() + Path.GetExtension(model.thumbnail.FileName);
-
-            var filePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "Uploads/ProductImage");
-
-            if (!Directory.Exists(filePath))
+            string url = "https://phutungnhapkhauchinhhang.com/wp-content/uploads/2020/06/default-thumbnail.jpg";
+            if (model.thumbnail != null)
             {
-                Directory.CreateDirectory(filePath);
+                
+                string filename = Guid.NewGuid().ToString() + Path.GetExtension(model.thumbnail.FileName);
+
+                var filePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "Uploads/ProductImage");
+
+                if (!Directory.Exists(filePath))
+                {
+                    Directory.CreateDirectory(filePath);
+                }
+
+                var upload = Path.Combine(filePath, filename);
+
+                model.thumbnail.CopyTo(new FileStream(upload, FileMode.Create));
+
+                url = $"{Request.Scheme}://{Request.Host}/Uploads/ProductImage/{filename}";
             }
-
-            var upload = Path.Combine(filePath, filename);
-
-            model.thumbnail.CopyTo(new FileStream(upload, FileMode.Create));
-
-            string url = $"{Request.Scheme}://{Request.Host}/Uploads/ProductImage/{filename}";
-
-            #endregion
+             #endregion
 
             return Ok(await _productRepo.AddProductCapsule(model, url));
 
         }
 
         [HttpPost, Authorize(Roles = "Admin")]
-        [Route("add/product/liquid")]
+        [Route("admin/create/product/liquid")]
         public async Task<IActionResult> CreateProductLiquid([FromForm] ProductLiquid model)
         {
             #region HANLDE FILE IMAGE
-            string filename = Guid.NewGuid().ToString() + Path.GetExtension(model.thumbnail.FileName);
-
-            var filePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "Uploads/ProductImage");
-
-            if (!Directory.Exists(filePath))
+            string url = "https://phutungnhapkhauchinhhang.com/wp-content/uploads/2020/06/default-thumbnail.jpg";
+            if (model.thumbnail != null)
             {
-                Directory.CreateDirectory(filePath);
+
+                string filename = Guid.NewGuid().ToString() + Path.GetExtension(model.thumbnail.FileName);
+
+                var filePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "Uploads/ProductImage");
+
+                if (!Directory.Exists(filePath))
+                {
+                    Directory.CreateDirectory(filePath);
+                }
+
+                var upload = Path.Combine(filePath, filename);
+
+                model.thumbnail.CopyTo(new FileStream(upload, FileMode.Create));
+
+                url = $"{Request.Scheme}://{Request.Host}/Uploads/ProductImage/{filename}";
             }
-
-            var upload = Path.Combine(filePath, filename);
-
-            model.thumbnail.CopyTo(new FileStream(upload, FileMode.Create));
-
-            string url = $"{Request.Scheme}://{Request.Host}/Uploads/ProductImage/{filename}";
-
             #endregion
 
             return Ok(await _productRepo.AddProductLiquid(model, url));
@@ -99,24 +113,8 @@ namespace PharmacyOnline.Controllers.Products
         }
 
 
-        [HttpGet]
-        [Route("listProduct")]
-        public async Task<IActionResult> getListProduct(int page, int pagesize)
-        {
-            return Ok( await _productRepo.getProductPaginate(page, pagesize) );
-        }
-
-
-        [HttpGet]
-        [Route("get/product/detail")]
-        public async Task<IActionResult> getDetail(int idProduct)
-        {
-            return Ok( await _productRepo.detailProduct(idProduct) );
-        }
-
-
         [HttpPost, Authorize(Roles = "Admin")]
-        [Route("update/tablet")]
+        [Route("admin/update/product/tablet")]
         public async Task<IActionResult> updateTablet([FromForm] ProductTablet2 model)
         {
             if ( model.thumbnail != null )
@@ -146,7 +144,7 @@ namespace PharmacyOnline.Controllers.Products
         }
 
         [HttpPost, Authorize(Roles = "Admin")]
-        [Route("update/capsule")]
+        [Route("admin/update/product/capsule")]
         public async Task<IActionResult> updateCapsule([FromForm] ProductCapsule2 model)
         {
             if (model.thumbnail != null)
@@ -176,7 +174,7 @@ namespace PharmacyOnline.Controllers.Products
         }
 
         [HttpPost, Authorize(Roles = "Admin")]
-        [Route("update/solid")]
+        [Route("admin/update/product/liquid")]
         public async Task<IActionResult> updateSolid([FromForm] ProductLiquid2 model )
         {
             if ( model.thumbnail != null )
@@ -205,36 +203,34 @@ namespace PharmacyOnline.Controllers.Products
 
         }
 
+        // gộp list product
+        [HttpGet]
+        [Route("getdetail")]
+        public async Task<IActionResult> getDetail(int idProduct)
+        {
+            return Ok(await _productRepo.detailProduct(idProduct));
+        }
+
+
+
         [HttpGet, Authorize(Roles = "Admin")]
-        [Route("delete/product")]
+        [Route("admin/delete")]
         public async Task<IActionResult> deleteP(int productId)
         {
             return Ok( await _productRepo.DeleteProduct(productId) );
         }
 
+        // gộp list product
+        //search=conmeo&cate=3&sorting=NAME_DESC&page=1
         [HttpGet]
-        [Route("search/product")]
-        public async Task<IActionResult> searchP(string search, int page = 1)
+        public async Task<IActionResult> sort(string? isNewest = null, string? search = null, int? cate = null, string? sorting = null, int page = 1)
         {
-            return Ok(await _productRepo.searchP( search, page));
+            return Ok( await _productRepo.sortSearchFilterPagin(isNewest, search, cate, sorting, page));
         }
 
+        // gộp list product
         [HttpGet]
-        [Route("filter/cate/product")]
-        public async Task<IActionResult> filter(int? cate, int page = 1)
-        {
-            return Ok(await _productRepo.filterCate(cate, page));
-        }
-
-        [HttpGet]
-        [Route("sort/filter/paginate/product")]
-        public async Task<IActionResult> sort(int? cate, string? sorting, int page = 1)
-        {
-            return Ok( await _productRepo.sortFilterPagin(cate, sorting, page));
-        }
-
-        [HttpGet]
-        [Route("getAll/categories")]
+        [Route("getall/category")]
         public async Task<IActionResult> category()
         {
             return Ok(await _productRepo.getAllCategories());

@@ -24,7 +24,7 @@ namespace PharmacyOnline.Controllers.Profile
         }
 
         [HttpPost, Authorize(Roles = "Candidate")] 
-        [Route("create/profile")]
+        [Route("candidate/create")]
         public async Task<IActionResult> createProfile(ProfileModel model)
         {
 
@@ -126,7 +126,7 @@ namespace PharmacyOnline.Controllers.Profile
 
 
         [HttpPost, Authorize(Roles = "Candidate")] 
-        [Route("update/profile")]
+        [Route("candidate/update")]
         public async Task<IActionResult> updateProfile(ProfileModel model, string idProfileDetail)
         {
 
@@ -152,9 +152,6 @@ namespace PharmacyOnline.Controllers.Profile
                 }
 
                 #endregion
-
-                
-
 
 
                 // check 2 file has value:
@@ -241,7 +238,7 @@ namespace PharmacyOnline.Controllers.Profile
         }
 
         [HttpPost, Authorize(Roles = "Candidate")] 
-        [Route("submit/profile")]
+        [Route("candidate/submit")]
         public async Task<IActionResult> submitProfile(int idCandidate,string idProfileDetail)
         {
             #region GET ID THROUGH TOKEN
@@ -268,7 +265,7 @@ namespace PharmacyOnline.Controllers.Profile
         }
 
         [HttpGet, Authorize(Roles = "Candidate")] 
-        [Route("cancel/submitted")]
+        [Route("candidate/cancel")]
         public async Task<IActionResult> cancelSubmitted(int idCandidate, string idProfileDetail)
         {
             #region GET ID THROUGH TOKEN
@@ -295,7 +292,7 @@ namespace PharmacyOnline.Controllers.Profile
         }
 
         [HttpGet, Authorize(Roles = "Candidate")] 
-        [Route("delete/resume")]
+        [Route("candidate/delete")]
         public async Task<IActionResult> deleteResume(int idCandidate, string idProfileDetail)
         {
             #region GET ID THROUGH TOKEN
@@ -322,7 +319,7 @@ namespace PharmacyOnline.Controllers.Profile
         }
 
         [HttpGet, Authorize(Roles = "Candidate")] 
-        [Route("get/resume")]
+        [Route("candidate/getprofile")]
         public async Task<IActionResult> getLocal(int idCandidate)
         {
             #region GET ID THROUGH TOKEN
@@ -348,7 +345,7 @@ namespace PharmacyOnline.Controllers.Profile
         }
 
         [HttpGet, Authorize(Roles = "Candidate")] 
-        [Route("get/history/resume")]
+        [Route("candidate/gethistory")]
         public async Task<IActionResult> getHistory(int idCandidate)
         {
             #region GET ID THROUGH TOKEN
@@ -379,53 +376,48 @@ namespace PharmacyOnline.Controllers.Profile
 
         //string idProfileDetail, int isQualified, string? body
 
-        [HttpPost, Authorize(Roles = "Admin")]  
-        [Route("admin/approved/profile")]
+        [HttpPost]  // , Authorize(Roles = "Admin")
+        [Route("admin/approved")]
         public async Task<IActionResult> AdminApprovedProfile(approvedCV model)
         {
             return Ok(await _ProfileService.ApprovingAdmin(model.idProfileDetail, model.isQualified, model.body));
         }
 
         [HttpGet, Authorize(Roles = "Admin")] 
-        [Route("admin/search/sdt/email")]
+        [Route("admin/search")]
         public async Task<IActionResult> AdminGetSubmitP(string search, int page = 1)
         {
             return Ok(await _ProfileService.searchSdtGmailAdmin(search, page));
         }
 
         [HttpGet, Authorize(Roles = "Admin")]  
-        [Route("admin/get/profile/submit")]
+        [Route("admin/getlist/submitted")]
         public async Task<IActionResult> AdminGetSubmitP(int page = 1)
         {
             return Ok(await _ProfileService.GetListSubmittedAdmin(page));
         }
 
-        [HttpGet, Authorize(Roles = "Admin")]  
-        [Route("admin/get/history/resume")]
-        public async Task<IActionResult> adminGetHistory(int page = 1)
+        
+        [HttpGet, Authorize(Roles = "Admin")]  // isQualified =  UNQUALIFIED || QUALIFIED
+        [Route("admin/getlist/history")]
+        public async Task<IActionResult> adminGetHistory(string? isQualified = null, int page = 1) //string? isQualified
         {
-            return Ok(await _ProfileService.GetHistoryProfileAdmin(page));
+            return Ok(await _ProfileService.GetHistoryProfileAdmin(page, isQualified));
         }
 
 
-        [HttpGet, Authorize(Roles = "Admin")]  
-        [Route("admin/get/detail/resume")]
+        [HttpGet, Authorize(Roles = "Admin")]  //
+        [Route("admin/getdetail")]
         public async Task<IActionResult> detailCV(string IdProfile)
         {
             return Ok(await _ProfileService.detailProfile(IdProfile));
         }
 
 
-
-
-
-
-
-
         // File cho admin có thể tải file cv và xem file cv của ứng viên | MAI TEST LẠI API NÀY ĐỔI LẠI ĐƯỜNG DẪN PATH VÀO LẤY DỮ LIỆU
         // install MimeTypes 4.0.0
         [HttpGet, Authorize(Roles = "Admin")] 
-        [Route("download/fileCV")]
+        [Route("admin/download/fileCV")]
         public async Task<IActionResult> DownloadFile(string idProfileDetail)
         {
             try
@@ -439,8 +431,6 @@ namespace PharmacyOnline.Controllers.Profile
                 {
                     return BadRequest("this profile doesnt have profile CV file");
                 }
-
-
 
                 string result = profileDT.FileCv;
 

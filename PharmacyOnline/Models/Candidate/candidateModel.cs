@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using PharmacyOnline.Models.ProfileModel;
+using System.ComponentModel.DataAnnotations;
 
 namespace PharmacyOnline.Models.Candidate
 {
@@ -49,7 +50,7 @@ namespace PharmacyOnline.Models.Candidate
     public class otpModel
     {
         [Required(ErrorMessage = "please enter otp")]
-        public string otp { get; set; }
+        public string? otp { get; set; } = null;
 
         [Required, EmailAddress]
         public string email { get; set; }
@@ -118,7 +119,8 @@ namespace PharmacyOnline.Models.Candidate
     {
         public string idProfileDetail { get; set; } = "";
         public int isQualified { get; set; } = 2;
-        public string? body { get; set; } = "";
+
+        public emailModel? body { get; set; } = null;
     }
 
 }

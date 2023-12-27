@@ -11,7 +11,7 @@ namespace PharmacyOnline.Models.ProductModel
 
         public string title { get; set; } = string.Empty;
 
-        public IFormFile thumbnail { get; set; }
+        public IFormFile? thumbnail { get; set; } = null;
 
         public string modelNumber { get; set; } = string.Empty;
         public string dies { get; set; } = string.Empty;
@@ -37,7 +37,7 @@ namespace PharmacyOnline.Models.ProductModel
 
         public string title { get; set; } = string.Empty;
 
-        public IFormFile thumbnail { get; set; }
+        public IFormFile? thumbnail { get; set; } = null;
 
         public string? Output { get; set; }
 
@@ -59,7 +59,7 @@ namespace PharmacyOnline.Models.ProductModel
 
         public string title { get; set; } = string.Empty;
 
-        public IFormFile thumbnail { get; set; }
+        public IFormFile? thumbnail { get; set; } = null;
 
         public string? AirPressure { get; set; }
 

@@ -25,47 +25,27 @@ namespace PharmacyOnline.Controllers.Statistics
 
         }
 
-        [HttpGet, Authorize(Roles = "Admin")]
-        [Route("statistic/month")]
-        public async Task<IActionResult> StatisticsMonth() {
+        [HttpGet, Authorize(Roles = "Admin")] 
+        [Route("admin/get")]
+        public async Task<IActionResult> Statistics() {
 
             return Ok( new
             {
                 numberCVSubmittedMonth = await _IstatisticService.getSumitedMonth(),
                 numberCVCheckedMonth = await _IstatisticService.getCheckedMonth(),
                 numberCVQualifiedMonth = await _IstatisticService.getQualifiedMonth(),
-                numberCVUnQualifiedMonth = await _IstatisticService.getUnQualifiedMonth()
-            });
-        }
-
-
-        [HttpGet, Authorize(Roles = "Admin")]
-        [Route("statistic/week")]
-        public async Task<IActionResult> StatisticsWeek()
-        {
-
-            return Ok(new
-            {
+                numberCVUnQualifiedMonth = await _IstatisticService.getUnQualifiedMonth(),
                 numberCVSubmittedWeek = await _IstatisticService.getSumitedWeek(),
                 numberCVCheckedWeek = await _IstatisticService.getCheckedWeek(),
                 numberCVQualifiedWeek = await _IstatisticService.getQualifiedWeek(),
-                numberCVUnQualifiedWeek = await _IstatisticService.getUnQualifiedWeek()
-            });
-        }
-
-        [HttpGet, Authorize(Roles = "Admin")]
-        [Route("statistic/day")]
-        public async Task<IActionResult> StatisticsDay()
-        {
-
-            return Ok(new
-            {
+                numberCVUnQualifiedWeek = await _IstatisticService.getUnQualifiedWeek(),
                 numberCVSubmittedDay = await _IstatisticService.getSumitedDay(),
                 numberCVCheckedDay = await _IstatisticService.getCheckedDay(),
                 numberCVQualifiedDay = await _IstatisticService.getQualifiedDay(),
                 numberCVUnQualifiedDay = await _IstatisticService.getUnQualifiedDay()
             });
         }
+
 
 
 

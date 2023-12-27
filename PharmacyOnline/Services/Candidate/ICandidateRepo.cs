@@ -11,7 +11,7 @@ namespace PharmacyOnline.Services.Candidate
 
         Task<tokens> login(loginModel model);
 
-        Task<result> sendAganOtp(sentAgainOTP model);
+  //      Task<result> sendAganOtp(sentAgainOTP model);
 
         Task<tokens> refreshToken(refreshTokenModel model);
 

@@ -61,7 +61,10 @@ namespace PharmacyOnline.Services.ProfileService
                     Reference = model.Reference,
                     Status = "EDIT",
                     CreatedAt = DateTime.Now,
-                    IsAccepted = "PENDING"
+                    IsAccepted = "PENDING",
+                    Age = model.Age,
+                    DateOfBirth = model.DateOfBirth,
+                    Gender= model.Gender,
                 };
 
                 await _context.PersonalDetails.AddAsync(PsDt);
@@ -72,6 +75,9 @@ namespace PharmacyOnline.Services.ProfileService
                     Id = PsDt.Id,
                     CandidateId = idCandidate,
                     Fullname = PsDt.Fullname,
+                    Age = PsDt.Age,
+                    DateOfBirth = PsDt.DateOfBirth,
+                    Gender = PsDt.Gender,
                     Address = PsDt.Address,
                     Number = PsDt.Number,
                     Email = PsDt.Email,
@@ -119,6 +125,9 @@ namespace PharmacyOnline.Services.ProfileService
                 {
                     Id = PsDt.Id,
                     Fullname = PsDt.Fullname,
+                    Age = PsDt.Age,
+                    DateOfBirth = PsDt.DateOfBirth,
+                    Gender = PsDt.Gender,
                     Address = PsDt.Address,
                     Number = PsDt.Number,
                     Email = PsDt.Email,
@@ -137,9 +146,6 @@ namespace PharmacyOnline.Services.ProfileService
                     updateAt = PsDt.UpdatedAt,
                     IsAccepted = PsDt.IsAccepted
                 };
-
-
-
             }
             catch (Exception ex)
             {
@@ -182,7 +188,7 @@ namespace PharmacyOnline.Services.ProfileService
                 }
                 #endregion*/
 
-                if (profileDT.Status == "SUBMITED")
+                if (profileDT.Status == "SUBMITTED")
                 {
                     return new Models.Candidate.result
                     {
@@ -208,6 +214,9 @@ namespace PharmacyOnline.Services.ProfileService
                 profileDT.Status = "EDIT";
                 profileDT.UpdatedAt = DateTime.Now;
                 profileDT.IsAccepted = "PENDING";
+                profileDT.Age = model.Age == ""? profileDT.Age:model.Age;
+                profileDT.DateOfBirth = model.DateOfBirth == null ? profileDT.DateOfBirth : model.DateOfBirth;
+                profileDT.Gender = model.Gender == ""?profileDT.Gender:model.Gender;
 
 
                 await _context.SaveChangesAsync();
@@ -217,6 +226,9 @@ namespace PharmacyOnline.Services.ProfileService
                     Id = profileDT.Id,
                     CandidateId = profileDT.CandidateId,
                     Fullname = profileDT.Fullname,
+                    Age = profileDT.Age,
+                    DateOfBirth = profileDT.DateOfBirth,
+                    Gender = profileDT.Gender,
                     Address = profileDT.Address,
                     Number = profileDT.Number,
                     Email = profileDT.Email,
@@ -263,7 +275,7 @@ namespace PharmacyOnline.Services.ProfileService
                     };
                 }
 
-                if (profileDT.Status == "SUBMITED" && profileDT.IsAccepted == "PENDING")
+                if (profileDT.Status == "SUBMITTED" && profileDT.IsAccepted == "PENDING")
                 {
                     // cho phép huỷ và chỉnh sửa lại hồ sơ:
                     profileDT.Status = "EDIT";
@@ -355,7 +367,7 @@ namespace PharmacyOnline.Services.ProfileService
                 if (profileDT.Status == "EDIT" && profileDT.IsAccepted == "PENDING")
                 {
 
-                    profileDT.Status = "SUBMITED";
+                    profileDT.Status = "SUBMITTED";
 
                     await _context.SaveChangesAsync();
                     return new Models.Candidate.result
@@ -388,7 +400,7 @@ namespace PharmacyOnline.Services.ProfileService
             List<ProfileDTO> newL = new List<ProfileDTO>();
             try
             {
-                var listP = _context.PersonalDetails.AsQueryable().Where(p => (p.Status == "EDIT" && p.CandidateId == candidateId || p.Status == "SUBMITED" && p.CandidateId == candidateId)).OrderByDescending(p => p.CreatedAt);
+                var listP = _context.PersonalDetails.AsQueryable().Where(p => (p.Status == "EDIT" && p.CandidateId == candidateId || p.Status == "SUBMITTED" && p.CandidateId == candidateId)).OrderByDescending(p => p.CreatedAt);
 
                 var personalDT = PaginationList<Entities.PersonalDetail>.Create(listP, 1, _PAGESIZE);
 
@@ -458,14 +470,28 @@ namespace PharmacyOnline.Services.ProfileService
         }
 
 
-        //  ADMIN   
-        public async Task<List<ProfileDTO>> GetHistoryProfileAdmin(int page)
+        //  ADMIN   UNQUALIFIED | QUALIFIED
+        public async Task<List<ProfileDTO>> GetHistoryProfileAdmin(int page, string? isQualified)
         {
             List<ProfileDTO> newL = new List<ProfileDTO>();
             try
             {
 
-                var listP = _context.PersonalDetails.AsQueryable().Where(p => (p.Status == "CHECKED")).OrderByDescending(p => p.CreatedAt);
+                var listP = _context.PersonalDetails.AsQueryable();
+
+                switch (isQualified)
+                {
+
+                    case "UNQUALIFIED":
+                         listP = listP.Where(p => (p.Status == "CHECKED" && p.IsAccepted == "UNQUALIFIED")).OrderByDescending(p => p.CreatedAt);
+                        break;
+                    case "QUALIFIED":
+                        listP = listP.Where(p => (p.Status == "CHECKED" && p.IsAccepted == "QUALIFIED")).OrderByDescending(p => p.CreatedAt);
+                        break;
+                    default: 
+                        listP = listP.Where(p => p.Status == "CHECKED").OrderByDescending(p => p.CreatedAt);
+                        break;
+                }
 
                 var personalDT = PaginationList<Entities.PersonalDetail>.Create(listP, page, _PAGESIZE);
 
@@ -503,7 +529,7 @@ namespace PharmacyOnline.Services.ProfileService
             try
             {
 
-                var listP = _context.PersonalDetails.AsQueryable().Where(p => (p.Status == "SUBMITED")).OrderByDescending(p => p.CreatedAt);
+                var listP = _context.PersonalDetails.AsQueryable().Where(p => (p.Status == "SUBMITTED")).OrderByDescending(p => p.CreatedAt);
 
                 var personalDT = PaginationList<Entities.PersonalDetail>.Create(listP, page, _PAGESIZE);
 
@@ -592,7 +618,7 @@ namespace PharmacyOnline.Services.ProfileService
 
 
 
-        public async Task<object> ApprovingAdmin(string idProfileDetail, int isQualified, string? body)
+        public async Task<object> ApprovingAdmin(string idProfileDetail, int isQualified, emailModel? body)
         {
             try
             {
@@ -602,7 +628,7 @@ namespace PharmacyOnline.Services.ProfileService
                     status = 404,
                     statusMessage = "not found the CV"
                 };
-                if ( Element.Status != "SUBMITED")
+                if ( Element.Status != "SUBMITTED")
                 {
                     return new Models.Candidate.result
                     {
@@ -621,9 +647,11 @@ namespace PharmacyOnline.Services.ProfileService
                         Element.Status = "CHECKED";
                         Element.IsAccepted = "QUALIFIED";
 
-                        if (!string.IsNullOrEmpty(candidate.Email) && !string.IsNullOrEmpty(body))
+                        string emailToSent = body.to == "" ? candidate.Email : body.to;
+
+                        if (!string.IsNullOrEmpty(emailToSent) && body != null)
                         {
-                            _IEmailService.sendData(candidate.Email, body);
+                            _IEmailService.sendData(emailToSent, body);
                         }
 
                         await _context.SaveChangesAsync();

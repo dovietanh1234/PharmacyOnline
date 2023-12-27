@@ -9,17 +9,17 @@ namespace PharmacyOnline.Controllers.Candidates
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class CandidateController : ControllerBase
+    public class AuthenticationController : ControllerBase
     {
         private readonly ICandidateRepo _candidateRepo;
 
-        public CandidateController(ICandidateRepo candidateRepo)
+        public AuthenticationController(ICandidateRepo candidateRepo)
         {
             _candidateRepo = candidateRepo;
         }
 
         [HttpPost]
-        [Route("admin/createAccount")]
+        [Route("admin/register")]
         public async Task<IActionResult> registerAdmin(AdminModel model)
         {
 
@@ -27,7 +27,7 @@ namespace PharmacyOnline.Controllers.Candidates
         }
 
         [HttpPost]
-        [Route("register")]
+        [Route("candidate/register")]
         public async Task<IActionResult> register(candidateModel model)
         {
            
@@ -35,7 +35,7 @@ namespace PharmacyOnline.Controllers.Candidates
         }
 
         [HttpPost]
-        [Route("verfyOTP")]
+        [Route("candidate/verify&resent/otp")]
         public async Task<IActionResult> verify(otpModel model)
         {
             return Ok(await _candidateRepo.verifyOtp(model));
@@ -49,22 +49,24 @@ namespace PharmacyOnline.Controllers.Candidates
             return Ok( await _candidateRepo.login(model) );
         }
 
-        [HttpPost]
+       
+
+        /* [HttpPost]
         [Route("resend/otp")]
         public async Task<IActionResult> resendOtp(sentAgainOTP model)
         {
             return Ok( await _candidateRepo.sendAganOtp(model) );
-        }
+        }*/
 
         [HttpPost]
-        [Route("refreshToken")]
+        [Route("candidate/refreshtoken")]
         public async Task<IActionResult> refreshToken(refreshTokenModel model)
         {
             return Ok( await  _candidateRepo.refreshToken(model) );
         }
 
         [HttpPost, Authorize(Roles = "Candidate")]
-        [Route("logout")]
+        [Route("candidate/logout")]
         public async Task<IActionResult> logout(logoutModel model)
         {
 
@@ -96,7 +98,7 @@ namespace PharmacyOnline.Controllers.Candidates
         }
 
         [HttpPost]
-        [Route("authen/google")]
+        [Route("candidate/login/google")]
         public async Task<IActionResult> authenByGoogle(GoogleTokenRequest model)
         {
             return Ok( await _candidateRepo.loginGoogle(model) );

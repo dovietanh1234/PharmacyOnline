@@ -20,48 +20,31 @@ namespace PharmacyOnline.Controllers.ManageCandidates
         }
 
         [HttpGet, Authorize(Roles = "Admin")]
-        [Route("list/candidates")]
-
-        public async Task<IActionResult> Index(int page)
+        [Route("admin/search&getlist")]
+        public async Task<IActionResult> Index(string? search, int page)
         {
-            return Ok( await _IManageCan.getListCans(page) );
+            return Ok( await _IManageCan.getListCans(search, page) );
         }
 
-        [HttpGet, Authorize(Roles = "Admin")]
+
+      
+        /*  [HttpGet, Authorize(Roles = "Admin")]
         [Route("candidate/search")]
 
         public async Task<IActionResult> search(string keyword, int page)
         {
             return Ok(await _IManageCan.searchCans(keyword, page));
-        }
-
-
-        [HttpGet, Authorize(Roles = "Candidate")]
-        [Route("get/candidate/informs/myself")]
-        public async Task<IActionResult> getCandidateToken()
-        {
-            var identity = HttpContext.User.Identity as ClaimsIdentity;
-            if (!identity.IsAuthenticated)
-            {
-                return Unauthorized("invalid  token! please try later");
-            }
-
-            int IdCategory = Convert.ToInt32(identity.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value);
-
-            return Ok(await _IManageCan.getProfileToken(IdCategory));
-        }
+        }*/
 
         [HttpGet, Authorize(Roles = "Admin")]
-        [Route("toggle/candidate")]
-
+        [Route("admin/toggle/user")]
         public async Task<IActionResult> toggleCand(int id)
         {
             return Ok(await _IManageCan.toggleU(id));
         }
 
         [HttpPost, Authorize(Roles = "Candidate")]
-        [Route("update/candidate")]
-
+        [Route("candidate/update/inform")]
         public async Task<IActionResult> update([FromForm] updateCan model)
         {
             #region CHECK TOKEN:
@@ -106,6 +89,21 @@ namespace PharmacyOnline.Controllers.ManageCandidates
                 return Ok( await _IManageCan.updateCan( model, url ) );
             }
             return Ok(await _IManageCan.updateCan(model, ""));
+        }
+
+        [HttpGet, Authorize(Roles = "Candidate")]
+        [Route("candidate/getinforms/token")]
+        public async Task<IActionResult> getCandidateToken()
+        {
+            var identity = HttpContext.User.Identity as ClaimsIdentity;
+            if (!identity.IsAuthenticated)
+            {
+                return Unauthorized("invalid  token! please try later");
+            }
+
+            int IdCategory = Convert.ToInt32(identity.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value);
+
+            return Ok(await _IManageCan.getProfileToken(IdCategory));
         }
 
 

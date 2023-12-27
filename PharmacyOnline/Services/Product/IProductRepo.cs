@@ -13,8 +13,6 @@ namespace PharmacyOnline.Services.Product
 
         Task<object> AddProductLiquid(ProductLiquid model, string url);
 
-        // render products:
-        Task<List<getAll>> getProductPaginate(int page, int pagesize);
 
         // watch detail:
         Task<object> detailProduct( int idProduct);
@@ -25,11 +23,11 @@ namespace PharmacyOnline.Services.Product
 
         Task<result> DeleteProduct(int ProductId);
 
+        // vẫn để nguyên cho Huy nhưng sẽ gộp vào cho Đức
         Task<List<getAll>> searchP(string search, int page, int pagesize = 10);
 
-        Task<List<getAll>> filterCate(int? cate, int page, int pagesize = 10);
-
-        Task<List<getAll>> sortFilterPagin(int? cate, string? sorting, int page, int pagesize = 10);
+        // sửa thêm search:
+        Task<List<getAll>> sortSearchFilterPagin(string? isNewest ,string? search, int? cate, string? sorting, int page, int pagesize = 10);
 
         Task<List<CategoryGet2>> getAllCategories();
 

@@ -97,6 +97,8 @@
         public string title { get; set; }
         public string thumbnail { get; set; }
         public virtual CategoryGet cateGet { get; set; }
+
+        public string? isNew { get; set; } = "";
     }
 
 

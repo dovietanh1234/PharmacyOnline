@@ -243,42 +243,6 @@ namespace PharmacyOnline.Services.Product
         }
 
 
-        public async Task<List<getAll>> getProductPaginate(int page, int pagesize)
-        {
-            List<getAll> new_list = new List<getAll>();
-            try
-            {
-                var products = _context.Products.AsQueryable().Include(p => p.Cate);
-
-                var result = PaginationList<Entities.Product>.Create(products, page, pagesize > 3 ? pagesize : PAGE_SIZE);
-
-               
-
-                foreach(var product in result)
-                {
-                    if (product.IsAtive == true)
-                    {
-                        new_list.Add(new getAll()
-                        {
-                            Id = product.Id,
-                            productName = product.ProductName,
-                            title = product.Title,
-                            thumbnail = product.Thumbnail,
-                            cateGet = new CategoryGet
-                            {
-                                CateName = product.Cate.CateName
-                            }
-                        });
-                    }
-                }
-
-                return new_list;
-
-            }catch(Exception ex)
-            {
-                return new_list;
-            }
-        }
 
         public async Task<object> detailProduct(int idProduct)
         {
@@ -656,6 +620,7 @@ namespace PharmacyOnline.Services.Product
             }
         }
 
+        // huy xử lý cái này
         public async Task<List<getAll>> searchP(string search, int page, int pagesize = 10)
         {
             List<getAll> new_list = new List<getAll>();
@@ -693,51 +658,15 @@ namespace PharmacyOnline.Services.Product
                 return new_list;
             }
         }
+        
 
-        public async Task<List<getAll>> filterCate(int? cate, int page, int pagesize = 10)
-        {
-            List<getAll> new_list = new List<getAll>();
-            try
-            {
-                var products = _context.Products.AsQueryable().Where(p => p.CateId == cate).Include(p => p.Cate);
-
-                
-                var result = PaginationList<Entities.Product>.Create(products, page, pagesize > 3 ? pagesize : PAGE_SIZE);
-
-
-
-                foreach (var product in result)
-                {
-                    if (product.IsAtive == true)
-                    {
-                        new_list.Add(new getAll()
-                        {
-                            Id = product.Id,
-                            productName = product.ProductName,
-                            title = product.Title,
-                            thumbnail = product.Thumbnail,
-                            cateGet = new CategoryGet
-                            {
-                                CateName = product.Cate.CateName
-                            }
-                        });
-                    }
-                }
-
-                return new_list;
-            }
-            catch (Exception ex) {
-                return new_list;
-            }
-        }
-
-        public async Task<List<getAll>> sortFilterPagin(int? cate, string? sorting, int page, int pagesize = 10)
+        public async Task<List<getAll>> sortSearchFilterPagin(string? isNewest, string? search, int? cate, string? sorting, int page, int pagesize = 10)
         {
              List<getAll> new_list = new List<getAll>();
             try
             {
                 var products = _context.Products.AsQueryable();
-
+                string isNew = "AVAILABLE";
                 
 
                 if (!string.IsNullOrEmpty(sorting))
@@ -746,7 +675,23 @@ namespace PharmacyOnline.Services.Product
                     {
                         case "NAME_ASC": products = products.OrderBy(p => p.ProductName); break;
                         case "NAME_DESC": products = products.OrderByDescending(p => p.ProductName); break;
-                        default: return new_list;
+                        default: break;
+                    }
+                }
+
+       
+                if (!string.IsNullOrEmpty(isNewest))
+                {
+                    switch (isNewest)
+                    {
+                        case "NEW": 
+                            products = products.Where( p => EF.Functions.DateDiffDay(p.CreatedAt, DateTime.Now) <=2 );
+                            isNew = "NEW";
+                            break;
+                        case "AVAILABLE":
+                            products = products.Where(p => EF.Functions.DateDiffDay(p.CreatedAt, DateTime.Now) > 2);
+                            break; 
+                        default: break;
                     }
                 }
 
@@ -755,27 +700,40 @@ namespace PharmacyOnline.Services.Product
                     products = products.Where(p => p.CateId == cate);
                 }
 
+
+                if (!string.IsNullOrEmpty(search))
+                {
+                    products = products.Where(p => (p.ProductName.Contains(search) || p.Title.Contains(search)));
+                }
+
                 products = products.Include(p => p.Cate);
 
                 var result = PaginationList<Entities.Product>.Create(products, page, pagesize > 3 ? pagesize : PAGE_SIZE);
 
 
-
                 foreach (var product in result)
                 {
+                    
                     if (product.IsAtive == true)
                     {
-                        new_list.Add(new getAll()
+                        if (product.CreatedAt != null)
                         {
-                            Id = product.Id,
-                            productName = product.ProductName,
-                            title = product.Title,
-                            thumbnail = product.Thumbnail,
-                            cateGet = new CategoryGet
+                            DateTime createAt = (DateTime)(product.CreatedAt);
+                            isNew = createAt.AddDays(2) > DateTime.Now ? "NEW" : "AVAILABLE";
+                        }
+                        new_list.Add(new getAll()
                             {
-                                CateName = product.Cate.CateName
-                            }
-                        });
+                                Id = product.Id,
+                                productName = product.ProductName,
+                                title = product.Title,
+                                thumbnail = product.Thumbnail,
+                                cateGet = new CategoryGet
+                                {
+                                    CateName = product.Cate.CateName
+                                },
+                                isNew = isNew
+                            });
+
                     }
                 }
 
@@ -783,7 +741,7 @@ namespace PharmacyOnline.Services.Product
 
 
             }
-            catch (Exception ex) { return new_list; }
+            catch (Exception ex) { throw new Exception(ex.Message); }
         }
 
 

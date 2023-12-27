@@ -61,11 +61,12 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJw
 
 
 
-
+// tích hợp google sheet:
 string clientSecret = builder.Configuration["GGSHEET:GGSHEETClientSecretPath"];
+string clientSecretPathOnAzure = Path.Combine(Directory.GetCurrentDirectory(), "eloquent-figure-409302-ae6d2cc39f9e.json");
 builder.Services.AddSingleton(s =>
 {
-    var credential = GoogleCredential.FromStream(new FileStream(clientSecret, FileMode.Open, FileAccess.Read)).CreateScoped(SheetsService.Scope.Spreadsheets);
+    var credential = GoogleCredential.FromStream(new FileStream(clientSecretPathOnAzure, FileMode.Open, FileAccess.Read)).CreateScoped(SheetsService.Scope.Spreadsheets);
     return new SheetsService(new BaseClientService.Initializer
     {
         HttpClientInitializer = credential,

@@ -22,12 +22,12 @@ namespace PharmacyOnline.Services.ProfileService
         Task<List<ProfileDTO>> GetHistory(int candidateId);
 
         // ADMIN
-        Task<List<ProfileDTO>> GetHistoryProfileAdmin(int page);
+        Task<List<ProfileDTO>> GetHistoryProfileAdmin(int page, string? isQualified);
         Task<List<ProfileDTO>> GetListSubmittedAdmin(int page);
 
         Task<List<ProfileDTO>> searchSdtGmailAdmin(string search, int page);
 
-        Task<object> ApprovingAdmin(string idProfileDetail, int isQualified, string? body);
+        Task<object> ApprovingAdmin(string idProfileDetail, int isQualified, emailModel? body);
 
 
     }

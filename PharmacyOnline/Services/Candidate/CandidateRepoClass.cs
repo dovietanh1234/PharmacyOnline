@@ -145,6 +145,98 @@ namespace PharmacyOnline.Services.Candidate
         {
             try
             {
+
+                if ( string.IsNullOrEmpty(model.otp) )
+                {
+                    int limit = 5;
+                    var salt = BCrypt.Net.BCrypt.GenerateSalt(10);
+
+                    // get newest OTP in DB -> to check limit in a day:
+                    var oldOtp = await _context.Otps.Where(o => o.Email == model.email).OrderByDescending(o => o.Id).FirstOrDefaultAsync();
+
+                    var user1 = await _context.Candidates.FirstOrDefaultAsync(c => c.Email == model.email);
+
+                    if (oldOtp == null || user1 == null)
+                    {
+                        return new result
+                        {
+                            status = 404,
+                            statusMessage = "you have not createted an account yet"
+                        };
+                    }
+
+                    if (user1.IsAtive == true)
+                    {
+                        return new result
+                        {
+                            status = 401,
+                            statusMessage = "your account has been activated"
+                        };
+                    }
+
+                    if (oldOtp.OtpSpamNumber > limit)
+                    {
+                        // if throgh a day we will accept to continue sent 5 otps for client
+                        if (oldOtp.OtpSpam < DateTime.Now)
+                        {
+                            oldOtp.OtpSpam = DateTime.Now.AddDays(1);
+                            oldOtp.OtpSpamNumber = 1;
+                            // create new otp and sent for client:
+                            string otp = await Common.HandleLogic.create_otp();
+                            _emailService.sendOtp(model.email, otp);
+
+                            var otpHash = BCrypt.Net.BCrypt.HashPassword(otp, salt);
+
+                            oldOtp.OtpHash = otpHash;
+                            oldOtp.LimitTimeToSendOtp = DateTime.Now.AddMinutes(1);
+
+                            await _context.SaveChangesAsync();
+                            return new result
+                            {
+                                status = 200,
+                                statusMessage = "otp has been sent in your email"
+                            };
+                        }
+                        else
+                        {
+                            // if less than a day and you've sent it more than 5 times:
+                            return new result
+                            {
+                                status = 401,
+                                statusMessage = "your number of otp in a day has expired"
+                            };
+                        }
+                    }
+
+                    // check to see if it's been more than 1 minutes
+                    if (oldOtp.LimitTimeToSendOtp > DateTime.Now)
+                    {
+                        return new result
+                        {
+                            status = 401,
+                            statusMessage = "otp can be sent every 1 minute"
+                        };
+                    }
+
+                    // accept for sent otp: 
+                    string validotp = await Common.HandleLogic.create_otp();
+                    _emailService.sendOtp(model.email, validotp);
+
+                    var validotpHash = BCrypt.Net.BCrypt.HashPassword(validotp, salt);
+
+                    oldOtp.OtpHash = validotpHash;
+                    oldOtp.OtpSpamNumber = oldOtp.OtpSpamNumber + 1;
+                    oldOtp.LimitTimeToSendOtp = DateTime.Now.AddMinutes(1);
+
+                    await _context.SaveChangesAsync();
+                    return new result
+                    {
+                        status = 200,
+                        statusMessage = "otp has been sent in your email"
+                    };
+                }
+                else
+                {
                 var newOtp = await _context.Otps.Where(o => o.Email == model.email).OrderByDescending(o => o.Id).FirstOrDefaultAsync();
 
                 if (newOtp == null)
@@ -197,6 +289,9 @@ namespace PharmacyOnline.Services.Candidate
                     statusMessage = "verify successfully! your account is enable"
                 };
 
+                }
+
+               
 
             }
             catch(Exception ex) {
@@ -309,7 +404,9 @@ namespace PharmacyOnline.Services.Candidate
         }
 
 
-        public async Task<result> sendAganOtp(sentAgainOTP model)
+     
+
+        /*   public async Task<result> sendAganOtp(sentAgainOTP model)
         {
 
             try
@@ -413,9 +510,7 @@ namespace PharmacyOnline.Services.Candidate
                 };
             }
 
-        }
-
-
+        }*/
 
         public async Task<tokens> refreshToken(refreshTokenModel model)
         {

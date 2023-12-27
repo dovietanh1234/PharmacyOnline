@@ -3,9 +3,7 @@ using MailKit.Security;
 using MimeKit;
 using MimeKit.Text;
 using PharmacyOnline.Entities;
-
-
-
+using PharmacyOnline.Models.ProfileModel;
 
 namespace PharmacyOnline.Services.EmailService
 {
@@ -45,7 +43,7 @@ namespace PharmacyOnline.Services.EmailService
             smtp.Disconnect(true);
         }
 
-        public void sendData(string to, string body)
+        public void sendData(string to, emailModel body)
         {
             var email = new MimeMessage();
 
@@ -55,10 +53,15 @@ namespace PharmacyOnline.Services.EmailService
 
             email.Subject = "Feedback email about your resume submitted to the website: \"PharmacyOnline.com\"";
 
+            string timenow = (DateTime.Now).ToString();
+
             email.Body = new TextPart(TextFormat.Html)
             {
-                Text = $"<h3> notification email:</h3></br><h4>Thank you for your interest in our company, we are happy to receive your profile. We congratulate your profile for being of interest to our company's management</h4>" +
-                $"</br> <h4>{body}</h4></br>Thank you for your time. Best regards"
+                Text = $"<h3>pharmaceutical company Notifications:</h3>\r\n  Datetime: {timenow}\r\n" +
+                $"</br>\r\n<h4>Thank you for your interest in our company, we are happy to receive your profile. We congratulate" +
+                $" your profile for being of interest to our company's management, We would like to have an interview appointment with you to exchange more information</h4>\r\n<p>Interview address:" +
+                $" {body.interviewAddress} </h>\r\n<p>Interview time: {body.appointment}</p>\r\n<p>_ {body.content}" +
+                $" write here </h>\r\n<br/>\r\n<p></br>Thank you for your time. \r\n</br>Best regards.</p>"
             };
 
             using var smtp = new SmtpClient();

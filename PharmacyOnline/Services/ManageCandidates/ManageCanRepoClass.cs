@@ -15,13 +15,19 @@ namespace PharmacyOnline.Services.ManageCandidates
             _context = context;
         }
 
-        public async Task<List<ListCans>> getListCans(int page)
+        public async Task<List<ListCans>> getListCans(string? search, int page)
         {
             List<ListCans> listCans = new List<ListCans>();
             try
             {
 
                 var cans = _context.Candidates.AsQueryable();
+
+                if ( !string.IsNullOrEmpty(search) )
+                {
+                    cans = cans.Where(c => (c.Username.Contains(search) || c.Email.Contains(search)));
+                }
+
                 var results = PaginationList<Entities.Candidate>.Create(cans, page, 10);
 
                 
@@ -47,7 +53,9 @@ namespace PharmacyOnline.Services.ManageCandidates
 
 
 
-        public async Task<List<ListCans>> searchCans(string search, int page)
+       
+
+        /* public async Task<List<ListCans>> searchCans(string search, int page)
         {
             List<ListCans> listCans = new List<ListCans>();
             try
@@ -75,7 +83,7 @@ namespace PharmacyOnline.Services.ManageCandidates
             {
                 return listCans;
             }
-        }
+        }*/
 
         public async Task<object> toggleU(int id)
         {
