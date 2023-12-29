@@ -33,7 +33,7 @@ namespace PharmacyOnline.Controllers.GoogleSheet
                 var spreadSheetId = _configuration.GetSection("GGSHEET:GGSHEETSpreadSheet").Value;
 
                 // tên của trang bạn muốn truy cập và hiện dữ liệu:
-                var range = "Sheet1!A23:E28";
+                var range = "Sheet1!A1:E5";
 
                 // create a list to contains data from DB's data:
                 var values = new List<IList<object>>();
@@ -41,7 +41,8 @@ namespace PharmacyOnline.Controllers.GoogleSheet
                 // chuyển đổi dữ liệu từ cơ sở dữ liệu thành danh sách:
                 foreach(var product in products)
                 {
-                    values.Add(new List<object>
+                
+                values.Add(new List<object>
                     {
                         product.Id, product.ProductName, product.Title, product.Thumbnail
                     });
@@ -62,6 +63,22 @@ namespace PharmacyOnline.Controllers.GoogleSheet
 
         }
 
+        /*
+         new List<IList<object>>(); -> DÙNG ĐỂ: Tạo một danh sách mới ( có chứa các danh sách con khác bên trong nó )
+         IList<>: đây là 1 interface trong c# -> dùng để: định nghĩa một TẬP HỢP CÁC PHƯƠNG THỨC MÀ DANH SÁCH NÊN CÓ + với việc sử dụng Object để lưu trữ một đối tượng của bất kỳ loại nào
+
+        ? tại sao phải sử dụng IList<object> thay vì List<object>:
+        IList<object>: biến này có thể lưu trữ bất kỳ đối tượng nào! 
+        List<object>: nếu ta biết chắc chắn rằng -> không cần đến sự linh hoạt thì sử dụng List<object>
+        Lợi ích IList: có thể THAY ĐỔI LOẠI CỤ THỂ CỦA DANH SÁCH ( Mà KHÔNG CẦN thay đổi kiểu của Biến )
+
+        ví dụ về IList:
+        IList<object> conmeo = new List<object>;
+        conmeo.Add( new Class1{ ... } )
+        conmeo.Add( new Class2{ ... } )
+
+        *LƯU Ý: Interface chỉ được lấy làm KIỂU DỮ LIỆU CHỨ NÓ KHÔNG THỂ KHỞI TẠO ĐỐI TƯỢNG 
+         */
 
 
         // hàm này để lấy data từ gg sheet đưa vào DATABASE

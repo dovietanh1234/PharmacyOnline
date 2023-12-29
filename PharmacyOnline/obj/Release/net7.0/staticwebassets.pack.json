@@ -1,0 +1,69 @@
+{
+  "Files": [
+    {
+      "Id": "E:\\LAST_SEM3_APTECH\\Project_BE\\PharmacyOnline\\PharmacyOnline\\wwwroot\\Uploads\\CanThumbnail\\fca88e42-d18b-440d-9beb-5d160d452809.jpg",
+      "PackagePath": "staticwebassets\\Uploads\\CanThumbnail\\fca88e42-d18b-440d-9beb-5d160d452809.jpg"
+    },
+    {
+      "Id": "E:\\LAST_SEM3_APTECH\\Project_BE\\PharmacyOnline\\PharmacyOnline\\wwwroot\\Uploads\\FileCv\\20484180-d7a2-43dd-9f45-a026b9d3b673.pdf",
+      "PackagePath": "staticwebassets\\Uploads\\FileCv\\20484180-d7a2-43dd-9f45-a026b9d3b673.pdf"
+    },
+    {
+      "Id": "E:\\LAST_SEM3_APTECH\\Project_BE\\PharmacyOnline\\PharmacyOnline\\wwwroot\\Uploads\\FileCv\\6c52bc17-b30f-4e9a-a2bf-963b9f0181d8.pdf",
+      "PackagePath": "staticwebassets\\Uploads\\FileCv\\6c52bc17-b30f-4e9a-a2bf-963b9f0181d8.pdf"
+    },
+    {
+      "Id": "E:\\LAST_SEM3_APTECH\\Project_BE\\PharmacyOnline\\PharmacyOnline\\wwwroot\\Uploads\\ProductImage\\20ef4713-63b8-4821-b5e7-0466baa785a7.jpg",
+      "PackagePath": "staticwebassets\\Uploads\\ProductImage\\20ef4713-63b8-4821-b5e7-0466baa785a7.jpg"
+    },
+    {
+      "Id": "E:\\LAST_SEM3_APTECH\\Project_BE\\PharmacyOnline\\PharmacyOnline\\wwwroot\\Uploads\\ProductImage\\39bf969c-59c3-463f-adef-361f240a15b7.jpg",
+      "PackagePath": "staticwebassets\\Uploads\\ProductImage\\39bf969c-59c3-463f-adef-361f240a15b7.jpg"
+    },
+    {
+      "Id": "E:\\LAST_SEM3_APTECH\\Project_BE\\PharmacyOnline\\PharmacyOnline\\wwwroot\\Uploads\\ProductImage\\3ae6348e-3bd9-47d8-90da-3fdd25431aab.jpg",
+      "PackagePath": "staticwebassets\\Uploads\\ProductImage\\3ae6348e-3bd9-47d8-90da-3fdd25431aab.jpg"
+    },
+    {
+      "Id": "E:\\LAST_SEM3_APTECH\\Project_BE\\PharmacyOnline\\PharmacyOnline\\wwwroot\\Uploads\\ProductImage\\5d3da3b3-0ce1-4b11-bb76-0e11b2264990.jpg",
+      "PackagePath": "staticwebassets\\Uploads\\ProductImage\\5d3da3b3-0ce1-4b11-bb76-0e11b2264990.jpg"
+    },
+    {
+      "Id": "E:\\LAST_SEM3_APTECH\\Project_BE\\PharmacyOnline\\PharmacyOnline\\wwwroot\\Uploads\\ProductImage\\8d4ddbfa-a2bf-4851-9f3c-92add37ef72d.PNG",
+      "PackagePath": "staticwebassets\\Uploads\\ProductImage\\8d4ddbfa-a2bf-4851-9f3c-92add37ef72d.PNG"
+    },
+    {
+      "Id": "E:\\LAST_SEM3_APTECH\\Project_BE\\PharmacyOnline\\PharmacyOnline\\wwwroot\\Uploads\\ProductImage\\92add3d1-346a-462d-8aec-a9c77cf2776c.jpg",
+      "PackagePath": "staticwebassets\\Uploads\\ProductImage\\92add3d1-346a-462d-8aec-a9c77cf2776c.jpg"
+    },
+    {
+      "Id": "E:\\LAST_SEM3_APTECH\\Project_BE\\PharmacyOnline\\PharmacyOnline\\wwwroot\\Uploads\\ProductImage\\cccba41c-9bd2-404d-a6aa-3b5a11a71a01.PNG",
+      "PackagePath": "staticwebassets\\Uploads\\ProductImage\\cccba41c-9bd2-404d-a6aa-3b5a11a71a01.PNG"
+    },
+    {
+      "Id": "E:\\LAST_SEM3_APTECH\\Project_BE\\PharmacyOnline\\PharmacyOnline\\wwwroot\\Uploads\\ProductImage\\efa0dc88-5584-49af-9a80-fe097992ce71.jpg",
+      "PackagePath": "staticwebassets\\Uploads\\ProductImage\\efa0dc88-5584-49af-9a80-fe097992ce71.jpg"
+    },
+    {
+      "Id": "E:\\LAST_SEM3_APTECH\\Project_BE\\PharmacyOnline\\PharmacyOnline\\wwwroot\\Uploads\\ProfileThumbnail\\fe8b9e92-c4c2-4943-b733-5b3f06903769.jpg",
+      "PackagePath": "staticwebassets\\Uploads\\ProfileThumbnail\\fe8b9e92-c4c2-4943-b733-5b3f06903769.jpg"
+    },
+    {
+      "Id": "obj\\Release\\net7.0\\staticwebassets\\msbuild.PharmacyOnline.Microsoft.AspNetCore.StaticWebAssets.props",
+      "PackagePath": "build\\Microsoft.AspNetCore.StaticWebAssets.props"
+    },
+    {
+      "Id": "obj\\Release\\net7.0\\staticwebassets\\msbuild.build.PharmacyOnline.props",
+      "PackagePath": "build\\PharmacyOnline.props"
+    },
+    {
+      "Id": "obj\\Release\\net7.0\\staticwebassets\\msbuild.buildMultiTargeting.PharmacyOnline.props",
+      "PackagePath": "buildMultiTargeting\\PharmacyOnline.props"
+    },
+    {
+      "Id": "obj\\Release\\net7.0\\staticwebassets\\msbuild.buildTransitive.PharmacyOnline.props",
+      "PackagePath": "buildTransitive\\PharmacyOnline.props"
+    }
+  ],
+  "ElementsToRemove": []
+}

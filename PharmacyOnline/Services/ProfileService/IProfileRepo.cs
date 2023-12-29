@@ -1,4 +1,5 @@
 ﻿using PharmacyOnline.DTO.ProfileDTO;
+using PharmacyOnline.Entities;
 using PharmacyOnline.Models.ProfileModel;
 
 namespace PharmacyOnline.Services.ProfileService
@@ -27,7 +28,7 @@ namespace PharmacyOnline.Services.ProfileService
 
         Task<List<ProfileDTO>> searchSdtGmailAdmin(string search, int page);
 
-        Task<object> ApprovingAdmin(string idProfileDetail, int isQualified, emailModel? body);
+        Task<object> ApprovingAdmin(string idProfileDetail, int isQualified, emailModel? body, PersonalDetail Element);
 
 
     }

@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.RateLimiting;
 using PharmacyOnline.Entities;
 using PharmacyOnline.Models.ProductModel;
 using PharmacyOnline.Services.Product;
@@ -223,6 +224,7 @@ namespace PharmacyOnline.Controllers.Products
         // gộp list product
         //search=conmeo&cate=3&sorting=NAME_DESC&page=1
         [HttpGet]
+        [EnableRateLimiting("fixedWindow")]
         public async Task<IActionResult> sort(string? isNewest = null, string? search = null, int? cate = null, string? sorting = null, int page = 1)
         {
             return Ok( await _productRepo.sortSearchFilterPagin(isNewest, search, cate, sorting, page));

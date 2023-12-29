@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.RateLimiting;
 
 namespace PharmacyOnline.Controllers
 {
@@ -19,6 +20,7 @@ namespace PharmacyOnline.Controllers
         }
 
         [HttpGet(Name = "GetWeatherForecast")]
+        [EnableRateLimiting("fixedWindow")]
         public IEnumerable<WeatherForecast> Get()
         {
             return Enumerable.Range(1, 5).Select(index => new WeatherForecast

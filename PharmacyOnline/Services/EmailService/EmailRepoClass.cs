@@ -60,8 +60,8 @@ namespace PharmacyOnline.Services.EmailService
                 Text = $"<h3>pharmaceutical company Notifications:</h3>\r\n  Datetime: {timenow}\r\n" +
                 $"</br>\r\n<h4>Thank you for your interest in our company, we are happy to receive your profile. We congratulate" +
                 $" your profile for being of interest to our company's management, We would like to have an interview appointment with you to exchange more information</h4>\r\n<p>Interview address:" +
-                $" {body.interviewAddress} </h>\r\n<p>Interview time: {body.appointment}</p>\r\n<p>_ {body.content}" +
-                $" write here </h>\r\n<br/>\r\n<p></br>Thank you for your time. \r\n</br>Best regards.</p>"
+                $" {body.interviewAddress} </h>\r\n<p>Interview time: {body.appointment}</p>\r\n<p>Note: {body.content}" +
+                $" </h>\r\n<br/>\r\n<p></br>Thank you for your time. \r\n</br>Best regards.</p>"
             };
 
             using var smtp = new SmtpClient();

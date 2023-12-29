@@ -2,6 +2,7 @@
 using Google.Apis.Services;
 using Google.Apis.Sheets.v4;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.RateLimiting;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using PharmacyOnline.Services.Candidate;
@@ -84,6 +85,18 @@ builder.Services.AddScoped<IProfileRepo, ProfileRepoClass>();
 builder.Services.AddScoped<IStatistics, StatisticsRepoClass>();
 
 
+// CẤU HÌNH RATE LIMIT:
+builder.Services.AddRateLimiter(o =>
+{
+    o.AddFixedWindowLimiter(policyName: "fixedWindow", o2 => {
+        // số lượng request trong 1 khoảng time nào đó:
+        o2.PermitLimit = 5;
+        o2.Window = TimeSpan.FromSeconds(10);
+        o2.QueueLimit = 0;
+    });
+});
+
+
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
@@ -98,6 +111,8 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseCors();
+
+app.UseRateLimiter();
 
 app.UseAuthentication();
 

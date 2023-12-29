@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using Google.Apis.Sheets.v4;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -16,11 +17,15 @@ namespace PharmacyOnline.Controllers.Profile
     {
         private readonly IProfileRepo _ProfileService;
         private readonly PharmacyOnlineContext _context;
+        private readonly SheetsService _sheetsService;
+        private readonly IConfiguration _configuration;
 
-        public ProfileController(IProfileRepo iprofileS, PharmacyOnlineContext context)
+        public ProfileController(IProfileRepo iprofileS, PharmacyOnlineContext context, SheetsService sheetsService, IConfiguration configuration)
         {
             _ProfileService = iprofileS;
             _context = context;
+            _sheetsService = sheetsService;
+            _configuration = configuration;
         }
 
         [HttpPost, Authorize(Roles = "Candidate")] 
@@ -380,7 +385,58 @@ namespace PharmacyOnline.Controllers.Profile
         [Route("admin/approved")]
         public async Task<IActionResult> AdminApprovedProfile(approvedCV model)
         {
-            return Ok(await _ProfileService.ApprovingAdmin(model.idProfileDetail, model.isQualified, model.body));
+            try
+            {
+                    var Element = await _context.PersonalDetails.FirstOrDefaultAsync(p => p.Id == model.idProfileDetail);
+                    if (Element == null) return Ok(
+                        new Models.Candidate.result
+                        {
+                            status = 404,
+                            statusMessage = "not found the CV"
+                        } 
+                    );
+
+                    if (model.isQualified == 1)
+                    {
+                    var numberSheet = await _context.GoogleSheetNumbers.FirstOrDefaultAsync( g => g.Id == 1 );
+
+                    if (numberSheet == null) return Ok(new Models.Candidate.result
+                    {
+                        status = 404,
+                        statusMessage = "Error! has error occured"
+                    });
+
+                    numberSheet.Ggsheetcolumn += 1;
+                    await _context.SaveChangesAsync();
+
+                    var spreadSheetId = _configuration.GetSection("GGSHEET:GGSHEETSpreadSheet").Value;
+                    var range = $"Sheet2!A{numberSheet.Ggsheetcolumn}:G{numberSheet.Ggsheetcolumn}";
+
+                    var values = new List<IList<object>>();
+
+                    values.Add(new List<object>
+                    {
+                        Element.Id, Element.Fullname, Element.Age, Element.Email, Element.Number, model.body.appointment, model.body.interviewAddress
+                    });
+
+                    var request = _sheetsService.Spreadsheets.Values.Update(new Google.Apis.Sheets.v4.Data.ValueRange { 
+                        Values = values
+                    }, spreadSheetId, range);
+
+                    request.ValueInputOption = SpreadsheetsResource.ValuesResource.UpdateRequest.ValueInputOptionEnum.USERENTERED;
+
+                    var response = await request.ExecuteAsync();
+                }
+
+                return Ok(await _ProfileService.ApprovingAdmin(model.idProfileDetail, model.isQualified, model.body, Element));
+            }
+            catch (Exception ex)
+            {
+                return BadRequest($"Error! exception ${ex}");
+            }
+
+            
+
         }
 
         [HttpGet, Authorize(Roles = "Admin")] 

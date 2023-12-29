@@ -618,16 +618,10 @@ namespace PharmacyOnline.Services.ProfileService
 
 
 
-        public async Task<object> ApprovingAdmin(string idProfileDetail, int isQualified, emailModel? body)
+        public async Task<object> ApprovingAdmin(string idProfileDetail, int isQualified, emailModel? body, PersonalDetail Element)
         {
             try
             {
-                var Element = await _context.PersonalDetails.FirstOrDefaultAsync(p => p.Id == idProfileDetail);
-                if (Element == null) return new Models.Candidate.result
-                {
-                    status = 404,
-                    statusMessage = "not found the CV"
-                };
                 if ( Element.Status != "SUBMITTED")
                 {
                     return new Models.Candidate.result

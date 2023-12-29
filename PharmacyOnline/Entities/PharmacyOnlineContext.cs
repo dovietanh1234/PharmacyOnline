@@ -20,6 +20,8 @@ public partial class PharmacyOnlineContext : DbContext
 
     public virtual DbSet<Category> Categories { get; set; }
 
+    public virtual DbSet<GoogleSheetNumber> GoogleSheetNumbers { get; set; }
+
     public virtual DbSet<KeyToken> KeyTokens { get; set; }
 
     public virtual DbSet<Otp> Otps { get; set; }
@@ -37,7 +39,7 @@ public partial class PharmacyOnlineContext : DbContext
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
 #warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see http://go.microsoft.com/fwlink/?LinkId=723263.
-        => optionsBuilder.UseSqlServer("Server=DESKTOP-DKL7C0F\\SQLEXPRESS;Database=pharmacyOnline;Trusted_Connection=True;TrustServerCertificate=True;");
+        => optionsBuilder.UseSqlServer("Server=tcp:sqlserver-vietanh-001.database.windows.net,1433;Database=pharmacyOnline;User ID=PharmacyOnline;Password=Dovietanh2k@;TrustServerCertificate=True;");
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -87,7 +89,7 @@ public partial class PharmacyOnlineContext : DbContext
 
         modelBuilder.Entity<Category>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK__category__3213E83FC6A4162F");
+            entity.HasKey(e => e.Id).HasName("PK__category__3213E83F2CC643FA");
 
             entity.ToTable("category");
 
@@ -96,6 +98,21 @@ public partial class PharmacyOnlineContext : DbContext
                 .HasMaxLength(100)
                 .IsUnicode(false)
                 .HasColumnName("cateName");
+        });
+
+        modelBuilder.Entity<GoogleSheetNumber>(entity =>
+        {
+            entity.HasKey(e => e.Id).HasName("PK__googleSh__3213E83FC39D2D3A");
+
+            entity.ToTable("googleSheetNumber");
+
+            entity.Property(e => e.Id).HasColumnName("id");
+            entity.Property(e => e.Ggsheetcolumn)
+                .HasDefaultValueSql("((1))")
+                .HasColumnName("ggsheetcolumn");
+            entity.Property(e => e.Ggsheetrow)
+                .HasDefaultValueSql("((1))")
+                .HasColumnName("ggsheetrow");
         });
 
         modelBuilder.Entity<KeyToken>(entity =>
@@ -122,7 +139,7 @@ public partial class PharmacyOnlineContext : DbContext
 
         modelBuilder.Entity<Otp>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK__otp__3213E83FCD990875");
+            entity.HasKey(e => e.Id).HasName("PK__otp__3213E83F6FA20EDA");
 
             entity.ToTable("otp");
 
@@ -146,7 +163,7 @@ public partial class PharmacyOnlineContext : DbContext
 
         modelBuilder.Entity<PersonalDetail>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK__personal__3213E83FE324900A");
+            entity.HasKey(e => e.Id).HasName("PK__personal__3213E83F66D7233B");
 
             entity.ToTable("personalDetail");
 
@@ -158,10 +175,17 @@ public partial class PharmacyOnlineContext : DbContext
                 .HasMaxLength(250)
                 .IsUnicode(false)
                 .HasColumnName("address");
+            entity.Property(e => e.Age)
+                .HasMaxLength(5)
+                .IsUnicode(false)
+                .HasColumnName("age");
             entity.Property(e => e.CandidateId).HasColumnName("candidateId");
             entity.Property(e => e.CreatedAt)
                 .HasColumnType("datetime")
                 .HasColumnName("createdAt");
+            entity.Property(e => e.DateOfBirth)
+                .HasColumnType("datetime")
+                .HasColumnName("dateOfBirth");
             entity.Property(e => e.Email)
                 .HasMaxLength(70)
                 .IsUnicode(false)
@@ -177,6 +201,10 @@ public partial class PharmacyOnlineContext : DbContext
                 .HasMaxLength(150)
                 .IsUnicode(false)
                 .HasColumnName("fullname");
+            entity.Property(e => e.Gender)
+                .HasMaxLength(10)
+                .IsUnicode(false)
+                .HasColumnName("gender");
             entity.Property(e => e.IsAccepted)
                 .HasMaxLength(50)
                 .IsUnicode(false)
@@ -225,12 +253,12 @@ public partial class PharmacyOnlineContext : DbContext
             entity.HasOne(d => d.Candidate).WithMany(p => p.PersonalDetails)
                 .HasForeignKey(d => d.CandidateId)
                 .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK__personalD__candi__5CD6CB2B");
+                .HasConstraintName("FK__personalD__candi__6EF57B66");
         });
 
         modelBuilder.Entity<Product>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK__product__3213E83FAD3CEBD1");
+            entity.HasKey(e => e.Id).HasName("PK__product__3213E83F4F2675FB");
 
             entity.ToTable("product");
 
@@ -259,17 +287,17 @@ public partial class PharmacyOnlineContext : DbContext
             entity.HasOne(d => d.Cate).WithMany(p => p.Products)
                 .HasForeignKey(d => d.CateId)
                 .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK__product__cateId__5812160E");
+                .HasConstraintName("FK__product__cateId__6FE99F9F");
 
             entity.HasOne(d => d.ProductDetail).WithMany(p => p.Products)
                 .HasForeignKey(d => d.ProductDetailId)
                 .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK__product__product__59063A47");
+                .HasConstraintName("FK__product__product__70DDC3D8");
         });
 
         modelBuilder.Entity<ProductDetail>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK__productD__3213E83F42334FCD");
+            entity.HasKey(e => e.Id).HasName("PK__productD__3213E83F38863D71");
 
             entity.ToTable("productDetail");
 

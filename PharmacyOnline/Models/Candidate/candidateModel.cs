@@ -49,7 +49,6 @@ namespace PharmacyOnline.Models.Candidate
 
     public class otpModel
     {
-        [Required(ErrorMessage = "please enter otp")]
         public string? otp { get; set; } = null;
 
         [Required, EmailAddress]
